@@ -8,13 +8,13 @@
       "year": "2010年",
       "mileage": "17万公里",
       "tags": ["原版原漆", "车况良好", "热门"],
-      "thumbnail": "images/cars/es240-1.jpg",
+      "thumbnail": "/images/cars/es240-1.jpg",
       "images": [
-        "images/cars/es240-2.jpg",
-        "images/cars/es240-2.jpg",
-        "images/cars/es240-3.jpg",
-        "images/cars/es240-4.jpg",
-        "images/cars/es240-5.jpg"
+        "/images/cars/es240-1.jpg",
+        "/images/cars/es240-2.jpg",
+        "/images/cars/es240-3.jpg",
+        "/images/cars/es240-4.jpg",
+        "/images/cars/es240-5.jpg"
       ],
       "highlights": ["全景天窗", "真皮座椅", "原版原漆"],
       "parameters": {
@@ -51,16 +51,17 @@
         "originalPrice": 38.5,
         "year": "2018",
         "mileage": "3.5万公里",
-        "thumbnail": "images\\Car\\2018广汽丰田雷凌 双擎\\雷凌 双擎-01",
+        "tags": ["混动", "省油", "热门"],
+        "thumbnail": "/images/Car/2018广汽丰田雷凌 双擎/雷凌 双擎-01.jpg",
         "images": [
-          "images\\Car\\2018广汽丰田雷凌 双擎\\雷凌 双擎-01",
-          "images\\Car\\2018广汽丰田雷凌 双擎\\雷凌 双擎-02",
-          "images\\Car\\2018广汽丰田雷凌 双擎\\雷凌 双擎-03",
-          "images\\Car\\2018广汽丰田雷凌 双擎\\雷凌 双擎-04",
-          "images\\Car\\2018广汽丰田雷凌 双擎\\雷凌 双擎-05",
-          "images\\Car\\2018广汽丰田雷凌 双擎\\雷凌 双擎-06",
-          "images\\Car\\2018广汽丰田雷凌 双擎\\雷凌 双擎-07",
-          "images\\Car\\2018广汽丰田雷凌 双擎\\雷凌 双擎-08"
+          "/images/Car/2018广汽丰田雷凌 双擎/雷凌 双擎-01.jpg",
+          "/images/Car/2018广汽丰田雷凌 双擎/雷凌 双擎-02.jpg",
+          "/images/Car/2018广汽丰田雷凌 双擎/雷凌 双擎-03.jpg",
+          "/images/Car/2018广汽丰田雷凌 双擎/雷凌 双擎-04.jpg",
+          "/images/Car/2018广汽丰田雷凌 双擎/雷凌 双擎-05.jpg",
+          "/images/Car/2018广汽丰田雷凌 双擎/雷凌 双擎-06.jpg",
+          "/images/Car/2018广汽丰田雷凌 双擎/雷凌 双擎-07.jpg",
+          "/images/Car/2018广汽丰田雷凌 双擎/雷凌 双擎-08.jpg"
         ],
         "highlights": [
           "5座"
