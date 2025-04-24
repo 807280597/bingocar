@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>优选汽车 - 高品质二手车交易平台</title>
+    <title>阿敬淘车 - 高品质二手车交易平台</title>
     <meta name="description" content="提供优质二手车买卖、评估、金融服务的专业平台">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -13,15 +13,11 @@
     <header>
         <div class="container header-container">
             <div class="logo">
-                <a href="index.html">优选汽车11123</a>
+                <a href="index.html">阿敬淘车</a>
             </div>
             <nav>
                 <ul class="nav-menu">
-                    <li><a href="index.html">首页</a></li>
-                    <li><a href="#">全部车源</a></li>
-                    <li><a href="#">买车流程</a></li>
-                    <li><a href="#">关于我们</a></li>
-                    <li><a href="#">联系电话：400-888-8888</a></li>
+                    <li><a href="#">联系电话：郭生（Monchy Guo） 13590104056（微信同号）</a></li>
                 </ul>
                 <button class="mobile-menu-btn">
                     <i class="fas fa-bars"></i>
@@ -30,145 +26,9 @@
         </div>
     </header>
 
-    <!-- 搜索区域 -->
-    <section class="search-section">
-        <div class="container">
-            <div class="search-container">
-                <form class="search-form" onsubmit="return searchCars()">
-                    <select id="brand">
-                        <option value="">品牌</option>
-                        <option value="奔驰">奔驰</option>
-                        <option value="宝马">宝马</option>
-                        <option value="奥迪">奥迪</option>
-                        <option value="丰田">丰田</option>
-                        <option value="本田">本田</option>
-                        <option value="大众">大众</option>
-                        <option value="特斯拉">特斯拉</option>
-                    </select>
-                    <select id="price">
-                        <option value="">价格</option>
-                        <option value="0-10">10万以下</option>
-                        <option value="10-15">10-15万</option>
-                        <option value="15-20">15-20万</option>
-                        <option value="20-30">20-30万</option>
-                        <option value="30-50">30-50万</option>
-                        <option value="50-100">50-100万</option>
-                        <option value="100+">100万以上</option>
-                    </select>
-                    <select id="year">
-                        <option value="">车龄</option>
-                        <option value="1">1年内</option>
-                        <option value="3">3年内</option>
-                        <option value="5">5年内</option>
-                        <option value="8">8年内</option>
-                        <option value="10+">8年以上</option>
-                    </select>
-                    <button type="submit">搜索</button>
-                </form>
-            </div>
-        </div>
-    </section>
 
-    <!-- 主要内容 -->
+    <!-- 主要内容区域 - 添加 main 开始标签 -->
     <main class="container">
-        <!-- 轮播图 -->
-        <section class="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="images/banner1.jpg" alt="精选好车，品质保障">
-                    <div class="carousel-caption">
-                        <h2>精选好车，品质保障</h2>
-                        <p>每辆车都经过259项专业检测</p>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="images/banner2.jpg" alt="0首付购车，轻松开回家">
-                    <div class="carousel-caption">
-                        <h2>0首付购车，轻松开回家</h2>
-                        <p>多种金融方案，月供低至1999元</p>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <img src="images/banner3.jpg" alt="专业检测，安心购车">
-                    <div class="carousel-caption">
-                        <h2>专业检测，安心购车</h2>
-                        <p>1年2万公里质保，故障免费修</p>
-                    </div>
-                </div>
-            </div>
-            <div class="carousel-controls">
-                <span class="carousel-dot active"></span>
-                <span class="carousel-dot"></span>
-                <span class="carousel-dot"></span>
-            </div>
-        </section>
-
-        <!-- 服务特点 -->
-        <section class="features">
-            <div class="feature-item">
-                <div class="feature-icon">
-                    <i class="fas fa-certificate"></i>
-                </div>
-                <h3 class="feature-title">品质认证</h3>
-                <p class="feature-desc">259项专业检测</p>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">
-                    <i class="fas fa-sync-alt"></i>
-                </div>
-                <h3 class="feature-title">7天无理由退车</h3>
-                <p class="feature-desc">不满意随时退</p>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <h3 class="feature-title">1年2万公里质保</h3>
-                <p class="feature-desc">故障免费修</p>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <h3 class="feature-title">手续齐全</h3>
-                <p class="feature-desc">资质真实可靠</p>
-            </div>
-        </section>
-
-        <!-- 分类导航 -->
-        <section class="categories">
-            <a href="#category-suv" class="category-item">
-                <div class="category-icon">
-                    <i class="fas fa-car-side"></i>
-                </div>
-                <div class="category-name">SUV</div>
-            </a>
-            <a href="#category-sedan" class="category-item">
-                <div class="category-icon">
-                    <i class="fas fa-car"></i>
-                </div>
-                <div class="category-name">轿车</div>
-            </a>
-            <a href="#category-new-energy" class="category-item">
-                <div class="category-icon">
-                    <i class="fas fa-charging-station"></i>
-                </div>
-                <div class="category-name">新能源</div>
-            </a>
-            <a href="#category-luxury" class="category-item">
-                <div class="category-icon">
-                    <i class="fas fa-gem"></i>
-                </div>
-                <div class="category-name">豪华车</div>
-            </a>
-            <a href="#category-value" class="category-item">
-                <div class="category-icon">
-                    <i class="fas fa-tags"></i>
-                </div>
-                <div class="category-name">性价比</div>
-            </a>
-        </section>
-
         <!-- 热门推荐 -->
         <h2 class="section-title">热门推荐</h2>
         <section class="car-list">
@@ -182,40 +42,21 @@
         </section>
     </main>
 
-    <!-- 页脚 -->
+    <!-- 页脚部分 -->
     <footer>
         <div class="container">
             <div class="footer-container">
                 <div class="footer-info">
-                    <h3>优选汽车</h3>
-                    <p>提供优质二手车买卖、评估、金融服务的专业平台</p>
-                    <p>联系电话：400-888-8888</p>
-                    <p>地址：北京市朝阳区建国路88号</p>
+                    <h3>阿敬淘车</h3>
+                    <p>提供优质二手车买卖、评估的专业平台</p>
+                    <p>联系电话：郭生（Monchy Guo） 13590104056（微信同号）</p>
                 </div>
-                <div class="footer-links">
-                    <h3>快速链接</h3>
-                    <ul>
-                        <li><a href="index.html">首页</a></li>
-                        <li><a href="#">全部车源</a></li>
-                        <li><a href="#">买车流程</a></li>
-                        <li><a href="#">关于我们</a></li>
-                    </ul>
-                </div>
-                <div class="footer-qrcode">
-                    <h3>关注我们</h3>
-                    <div class="qrcode-img">
-                        <img src="images/qrcode.png" alt="扫码关注公众号">
-                    </div>
-                    <p>扫码关注公众号</p>
-                </div>
-            </div>
-            <div class="copyright">
-                © 2023 优选汽车 版权所有
+                
             </div>
         </div>
     </footer>
 
-    <script src="js/config.js"></script>
+    <!-- 删除调试代码，简化脚本引用 -->
     <script src="js/main.js"></script>
 </body>
 </html>
