@@ -53,13 +53,75 @@ function initCarousel() {
     });
 }
 
+// 渲染车辆列表
+function renderCars(cars, container) {
+    container.innerHTML = '';
+    
+    if (!cars || cars.length === 0) {
+        container.innerHTML = '<div class="no-cars">暂无车辆信息</div>';
+        return;
+    }
+    
+    cars.forEach(car => {
+        // 检查必要字段是否存在
+        if (!car.id || !car.thumbnail) {
+            console.error('车辆数据缺少必要字段:', car);
+            return;
+        }
+        
+        const carElement = document.createElement('div');
+        carElement.className = 'car-card';
+        
+        // 构建HTML，处理可能不存在的字段
+        let html = `
+            <a href="detail.html?id=${car.id}">
+                <div class="car-image">
+                    <img src="${car.thumbnail}" alt="${car.title || '汽车'}">
+                </div>
+                <div class="car-info">`;
+        
+        if (car.title) {
+            html += `<h3 class="car-title">${car.title}</h3>`;
+        }
+        
+        // 价格信息，检查是否存在
+        html += `<div class="car-price">`;
+        if (car.price) {
+            html += `<span class="current-price">${car.price}万</span>`;
+        }
+        if (car.originalPrice) {
+            html += `<span class="original-price">${car.originalPrice}万</span>`;
+        }
+        html += `</div>`;
+        
+        // 元数据信息，检查是否存在
+        if (car.year || car.mileage) {
+            html += `<div class="car-meta">`;
+            if (car.year) html += `<span>${car.year}</span>`;
+            if (car.mileage) html += `<span>${car.mileage}</span>`;
+            html += `</div>`;
+        }
+        
+        // 标签信息，检查是否存在
+        if (car.tags && car.tags.length > 0) {
+            html += `<div class="car-tags">`;
+            html += car.tags.map(tag => `<span class="car-tag ${tag === '热门' ? 'hot' : ''}">${tag}</span>`).join('');
+            html += `</div>`;
+        }
+        
+        html += `</div></a>`;
+        carElement.innerHTML = html;
+        container.appendChild(carElement);
+    });
+}
+
 // 加载车辆数据
 function loadCars() {
     const carListElements = document.querySelectorAll('.car-list');
     if (carListElements.length === 0) return;
     
-    // 从 cars.json 加载数据
-    fetch('data/cars.json')
+    // 从 cars.json 加载数据，使用绝对路径
+    fetch('/data/cars.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error('网络响应不正常');
@@ -69,9 +131,15 @@ function loadCars() {
         .then(data => {
             console.log('成功加载车辆数据:', data); // 添加日志
             
+            if (!data.cars || !Array.isArray(data.cars)) {
+                console.error('车辆数据格式不正确，缺少cars数组');
+                return;
+            }
+            
             carListElements.forEach((element, index) => {
                 if (index === 0 && !element.classList.contains('recommend-list')) {
-                    const hotCars = data.cars.filter(car => car.tags.includes('热门'));
+                    // 热门车辆，检查tags字段是否存在
+                    const hotCars = data.cars.filter(car => car.tags && car.tags.includes('热门'));
                     console.log('热门车辆:', hotCars); // 添加日志
                     renderCars(hotCars, element);
                 } else if (index === 1 && !element.classList.contains('recommend-list')) {
@@ -84,6 +152,10 @@ function loadCars() {
         })
         .catch(error => {
             console.error('加载车辆数据失败:', error);
+            // 在页面上显示错误信息
+            carListElements.forEach(element => {
+                element.innerHTML = `<div class="error-message">加载车辆数据失败: ${error.message}</div>`;
+            });
         });
 }
 
@@ -114,38 +186,6 @@ function loadCarDetail() {
         .catch(error => {
             console.error('加载车辆数据失败:', error);
         });
-}
-
-// 渲染车辆列表
-function renderCars(cars, container) {
-    container.innerHTML = '';
-    
-    cars.forEach(car => {
-        const carElement = document.createElement('div');
-        carElement.className = 'car-card';
-        carElement.innerHTML = `
-            <a href="detail.html?id=${car.id}">
-                <div class="car-image">
-                    <img src="${car.thumbnail}" alt="${car.title}">
-                </div>
-                <div class="car-info">
-                    <h3 class="car-title">${car.title}</h3>
-                    <div class="car-price">
-                        <span class="current-price">${car.price}万</span>
-                        <span class="original-price">${car.originalPrice}万</span>
-                    </div>
-                    <div class="car-meta">
-                        <span>${car.year}</span>
-                        <span>${car.mileage}</span>
-                    </div>
-                    <div class="car-tags">
-                        ${car.tags.map(tag => `<span class="car-tag ${tag === '热门' ? 'hot' : ''}">${tag}</span>`).join('')}
-                    </div>
-                </div>
-            </a>
-        `;
-        container.appendChild(carElement);
-    });
 }
 
 // 渲染车辆详情
@@ -274,4 +314,3 @@ function searchCars() {
     alert('搜索功能已触发，条件：' + JSON.stringify({ brand, price, year }));
     return false; // 阻止表单提交
 }
-
