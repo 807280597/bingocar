@@ -191,7 +191,7 @@ function loadCarDetail() {
 // 渲染车辆详情
 function renderCarDetail(car) {
     // 设置页面标题
-    document.title = car.title + ' - 优选汽车';
+    document.title = car.title + ' - 阿敬淘车';
     
     // 渲染图片画廊
     const galleryMain = document.querySelector('.gallery-main');
@@ -299,18 +299,4 @@ function initMobileMenu() {
     menuBtn.addEventListener('click', () => {
         navMenu.classList.toggle('active');
     });
-}
-
-// 搜索功能
-function searchCars() {
-    const brand = document.getElementById('brand').value;
-    const price = document.getElementById('price').value;
-    const year = document.getElementById('year').value;
-    
-    console.log('搜索条件:', { brand, price, year });
-    // 实际项目中这里应该发送请求到服务器进行搜索
-    // 这里仅作演示
-    
-    alert('搜索功能已触发，条件：' + JSON.stringify({ brand, price, year }));
-    return false; // 阻止表单提交
 }
