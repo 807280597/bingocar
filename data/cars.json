@@ -3,6 +3,8 @@
     {
       "id": 1000,
       "title": "雷克萨斯 ES 2010款 ES 240 典雅版",
+      "price": 26.8,
+      "originalPrice": 38.5,
       "year": "2010年",
       "mileage": "17万公里",
       "tags": ["原版原漆", "车况良好", "热门"],
@@ -45,6 +47,8 @@
     {
         "id": 1002,
         "title": "丰田雷凌双擎 1.8HGS-V E-CVT尊贵版",
+        "price": 26.8,
+        "originalPrice": 38.5,
         "year": "2018",
         "mileage": "3.5万公里",
         "thumbnail": "images\\Car\\2018广汽丰田雷凌 双擎\\雷凌 双擎-01",
