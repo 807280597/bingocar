@@ -492,3 +492,166 @@ function initMobileMenu() {
         navMenu.classList.toggle('active');
     });
 }
+
+// 在文件末尾添加搜索功能相关代码
+
+// 初始化搜索功能
+function initSearch() {
+    // 获取当前年份
+    const currentYear = new Date().getFullYear();
+    
+    // 加载品牌选项
+    const brandSelect = document.getElementById('brandSelect');
+    if (brandSelect) {
+        // 获取所有不重复的品牌
+        const brands = [...new Set(carsData.map(car => car.category))];
+        
+        // 添加品牌选项
+        brands.forEach(brand => {
+            if (brand) {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                brandSelect.appendChild(option);
+            }
+        });
+    }
+    
+    // 搜索表单提交
+    const searchForm = document.getElementById('searchForm');
+    if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const brand = document.getElementById('brandSelect').value;
+            const age = document.getElementById('ageSelect').value;
+            const mileage = document.getElementById('mileageSelect').value;
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            
+            // 构建查询参数
+            const params = new URLSearchParams();
+            if (brand) params.set('brand', brand);
+            if (age) params.set('age', age);
+            if (mileage) params.set('mileage', mileage);
+            if (keyword) params.set('keyword', keyword);
+            
+            // 跳转到首页并带上查询参数
+            window.location.href = `index.html?${params.toString()}`;
+        });
+    }
+}
+
+// 根据搜索条件过滤车辆
+function filterCars() {
+    // 获取URL参数
+    const params = new URLSearchParams(window.location.search);
+    const brand = params.get('brand');
+    const age = params.get('age');
+    const mileage = params.get('mileage');
+    const keyword = params.get('keyword');
+    
+    // 如果没有搜索参数，返回所有车辆
+    if (!brand && !age && !mileage && !keyword) {
+        return carsData;
+    }
+    
+    // 获取当前年份
+    const currentYear = new Date().getFullYear();
+    
+    // 过滤车辆
+    return carsData.filter(car => {
+        // 品牌过滤
+        if (brand && car.category !== brand) {
+            return false;
+        }
+        
+        // 车龄过滤
+        if (age && age !== '100') {
+            const carYear = parseInt(car.year);
+            const carAge = currentYear - carYear;
+            if (carAge > parseInt(age)) {
+                return false;
+            }
+        }
+        
+        // 里程过滤
+        if (mileage && mileage !== '100') {
+            const carMileage = parseFloat(car.mileage);
+            const mileageValue = parseFloat(mileage);
+            
+            if (mileage === '1.0' && carMileage > 1.0) {
+                return false;
+            } else if (mileage === '1.6' && (carMileage < 1.0 || carMileage > 1.6)) {
+                return false;
+            } else if (mileage === '2.0' && (carMileage < 1.6 || carMileage > 2.0)) {
+                return false;
+            } else if (mileage === '2.5' && (carMileage < 2.0 || carMileage > 2.5)) {
+                return false;
+            } else if (mileage === '3.0' && (carMileage < 2.5 || carMileage > 3.0)) {
+                return false;
+            } else if (mileage === '4.0' && (carMileage < 3.0 || carMileage > 4.0)) {
+                return false;
+            } else if (mileage === '10.0' && carMileage < 4.0) {
+                return false;
+            }
+        }
+        
+        // 关键词搜索
+        if (keyword) {
+            const searchFields = [
+                car.title,
+                car.description,
+                car.category,
+                car.year,
+                car.mileage,
+                car.displacement
+            ].filter(Boolean).map(field => field.toString().toLowerCase());
+            
+            // 检查标签
+            if (car.tags && Array.isArray(car.tags)) {
+                car.tags.forEach(tag => {
+                    if (tag) searchFields.push(tag.toLowerCase());
+                });
+            }
+            
+            // 检查亮点
+            if (car.highlights && Array.isArray(car.highlights)) {
+                car.highlights.forEach(highlight => {
+                    if (highlight) searchFields.push(highlight.toLowerCase());
+                });
+            }
+            
+            return searchFields.some(field => field.includes(keyword));
+        }
+        
+        return true;
+    });
+}
+
+// 在页面加载完成后初始化搜索功能
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化搜索
+    initSearch();
+    
+    // 如果在首页，根据搜索条件加载车辆
+    if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
+        // 修改loadCars函数调用，使用过滤后的车辆数据
+        const filteredCars = filterCars();
+        loadCars(filteredCars);
+        
+        // 如果有搜索参数，填充搜索表单
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('brand')) {
+            document.getElementById('brandSelect').value = params.get('brand');
+        }
+        if (params.has('age')) {
+            document.getElementById('ageSelect').value = params.get('age');
+        }
+        if (params.has('mileage')) {
+            document.getElementById('mileageSelect').value = params.get('mileage');
+        }
+        if (params.has('keyword')) {
+            document.getElementById('searchInput').value = params.get('keyword');
+        }
+    }
+});
