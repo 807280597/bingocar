@@ -305,13 +305,129 @@ header {
     color: var(--accent-color);
 }
 
-/* 详情页样式 */
-.car-detail {
+/* 搜索栏样式 */
+.search-bar {
+    display: flex;
+    align-items: center;
     background-color: var(--background-light);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    padding: 10px;
     margin: 20px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.search-select {
+    position: relative;
+    margin-right: 10px;
+}
+
+.search-select select {
+    appearance: none;
+    background-color: #f5f5f7;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 8px 30px 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    min-width: 100px;
+}
+
+.search-select::after {
+    content: '\f107';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.search-input {
+    flex: 1;
+    position: relative;
+}
+
+.search-input input {
+    width: 100%;
+    padding: 8px 40px 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.search-input button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 40px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-input button:hover {
+    color: var(--primary-color);
+}
+
+/* 移动端搜索栏适配 */
+@media (max-width: 768px) {
+    .search-bar {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .search-select {
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    .search-input {
+        flex: 100%;
+        order: 3;
+    }
+}
+
+.search-input button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 40px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-input button:hover {
+    color: var(--primary-color);
+}
+
+/* 移动端搜索栏适配 */
+@media (max-width: 768px) {
+    .search-bar {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .search-select {
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    .search-input {
+        flex: 100%;
+        order: 3;
+    }
 }
 
 .detail-gallery {
@@ -664,71 +780,5 @@ footer {
 @media (max-width: 768px) {
     .logo span {
         font-size: 16px;
-    }
-}
-
-/* 搜索栏样式 */
-.search-container {
-    background-color: var(--background-light);
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    margin: 20px 0;
-}
-
-.search-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.search-group {
-    flex: 1;
-    min-width: 150px;
-}
-
-.search-group select, 
-.search-group input {
-    width: 100%;
-    padding: 10px 15px;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 14px;
-    color: var(--text-primary);
-    background-color: #fff;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8.825L1.175 4 2.05 3.125 6 7.075 9.95 3.125 10.825 4z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-}
-
-.search-group input {
-    background-image: none;
-}
-
-.search-btn {
-    padding: 10px 20px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.search-btn:hover {
-    background-color: #005bbf;
-}
-
-/* 移动端搜索适配 */
-@media (max-width: 768px) {
-    .search-form {
-        flex-direction: column;
-    }
-    
-    .search-group {
-        min-width: 100%;
     }
 }

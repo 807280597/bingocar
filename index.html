@@ -29,52 +29,34 @@
         </div>
     </header>
 
-
-    <!-- 主要内容区域 - 添加 main 开始标签 -->
-    <!-- 在主要内容区域的开始位置添加搜索栏 -->
-    <main class="container">
-        <!-- 搜索栏 -->
-        <div class="search-container">
-            <form class="search-form" id="searchForm">
-                <div class="search-group">
-                    <select id="brandSelect">
-                        <option value="">品牌</option>
-                        <!-- 品牌选项将通过JavaScript动态加载 -->
-                    </select>
-                </div>
-                <div class="search-group">
-                    <select id="ageSelect">
-                        <option value="">车龄</option>
-                        <option value="0">0年</option>
-                        <option value="2">2年</option>
-                        <option value="4">4年</option>
-                        <option value="6">6年</option>
-                        <option value="8">8年</option>
-                        <option value="100">不限</option>
-                    </select>
-                </div>
-                <div class="search-group">
-                    <select id="mileageSelect">
-                        <option value="">里程</option>
-                        <option value="1.0">1.0以下</option>
-                        <option value="1.6">1.0-1.6</option>
-                        <option value="2.0">1.6-2.0</option>
-                        <option value="2.5">2.0-2.5</option>
-                        <option value="3.0">2.5-3.0</option>
-                        <option value="4.0">3.0-4.0</option>
-                        <option value="10.0">4.0以上</option>
-                        <option value="100">不限</option>
-                    </select>
-                </div>
-                <div class="search-group">
-                    <input type="text" id="searchInput" placeholder="搜索">
-                </div>
-                <button type="submit" class="search-btn">
-                    <i class="fas fa-search"></i> 搜索
-                </button>
-            </form>
+    <!-- 搜索栏 -->
+    <div class="container">
+        <div class="search-bar">
+            <div class="search-select">
+                <select id="brandSelect">
+                    <option value="">品牌</option>
+                    <!-- 品牌选项将通过JavaScript动态加载 -->
+                </select>
+            </div>
+            <div class="search-select">
+                <select id="ageSelect">
+                    <option value="">车龄</option>
+                    <option value="0">0年</option>
+                    <option value="2">2年</option>
+                    <option value="4">4年</option>
+                    <option value="6">6年</option>
+                    <option value="8">8年</option>
+                </select>
+            </div>
+            <div class="search-input">
+                <input type="text" id="searchInput" placeholder="搜索车型...">
+                <button id="searchBtn"><i class="fas fa-search"></i></button>
+            </div>
         </div>
-        
+    </div>
+
+    <!-- 主要内容 -->
+    <main class="container">
         <!-- 热门推荐 -->
         <h2 class="section-title">热门推荐</h2>
         <section class="car-list">
@@ -104,7 +86,8 @@
         </div>
     </footer>
 
-    <!-- 删除调试代码，简化脚本引用 -->
+    <!-- 在页面底部添加 -->
     <script src="js/main.js"></script>
+    <script src="js/search.js"></script>
 </body>
 </html>
