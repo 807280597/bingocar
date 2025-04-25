@@ -306,6 +306,17 @@ header {
 }
 
 /* 搜索栏样式 */
+/* 添加搜索结果相关样式 */
+.no-results {
+    text-align: center;
+    padding: 30px;
+    background-color: var(--background-light);
+    border-radius: 10px;
+    margin: 20px 0;
+    color: var(--text-secondary);
+    font-size: 16px;
+}
+
 .search-bar {
     display: flex;
     align-items: center;

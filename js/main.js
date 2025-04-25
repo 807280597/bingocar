@@ -507,3 +507,6 @@ function initMobileMenu() {
         navMenu.classList.toggle('active');
     });
 }
+
+// 确保页面加载时执行
+document.addEventListener('DOMContentLoaded', loadCars);
