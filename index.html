@@ -2,11 +2,48 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>阿敬淘车 - 高品质二手车交易平台</title>
     <meta name="description" content="提供优质二手车买卖、评估、金融服务的专业平台">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* 移动端适配样式 */
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+                background: none;
+                border: none;
+                color: #333;
+                font-size: 24px;
+                cursor: pointer;
+            }
+            
+            .nav-menu {
+                display: none;
+                width: 100%;
+                text-align: center;
+                margin-top: 10px;
+            }
+            
+            .nav-menu.active {
+                display: block;
+            }
+            
+            .nav-menu li {
+                margin: 10px 0;
+            }
+            
+            .car-card {
+                margin-bottom: 20px;
+            }
+            
+            .car-image img {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- 头部导航 -->
@@ -16,18 +53,17 @@
                 <a href="index.html">阿敬淘车</a>
             </div>
             <nav>
-                <ul class="nav-menu">
+                <ul class="nav-menu" id="navMenu">
                     <li><a href="#">联系电话：郭生（Monchy Guo） 13590104056（微信同号）</a></li>
                 </ul>
-                <button class="mobile-menu-btn">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
                     <i class="fas fa-bars"></i>
                 </button>
             </nav>
         </div>
     </header>
 
-
-    <!-- 主要内容区域 - 添加 main 开始标签 -->
+    <!-- 主要内容区域 -->
     <main class="container">
         <!-- 热门推荐 -->
         <h2 class="section-title">热门推荐</h2>
@@ -49,14 +85,25 @@
                 <div class="footer-info">
                     <h3>阿敬淘车</h3>
                     <p>提供优质二手车买卖、评估的专业平台</p>
-                    <p>联系电话：郭生（Monchy Guo） 13590104056（微信同号）</p>
+                    <p>联系电话：13590104056</p>
                 </div>
-                
             </div>
         </div>
     </footer>
 
-    <!-- 删除调试代码，简化脚本引用 -->
     <script src="js/main.js"></script>
+    <script>
+        // 移动端菜单切换
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (mobileMenuBtn && navMenu) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
