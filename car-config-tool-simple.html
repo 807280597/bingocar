@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -573,4 +574,581 @@
         });
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汽车信息配置工具 - 简化版</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .form-container {
+            flex: 1;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+        }
+        .output-container {
+            flex: 1;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .section-title {
+            margin-top: 20px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .dynamic-fields {
+            margin-bottom: 10px;
+        }
+        .dynamic-field {
+            display: flex;
+            margin-bottom: 5px;
+        }
+        .dynamic-field input {
+            flex: 1;
+            margin-right: 5px;
+        }
+        .dynamic-field button {
+            background-color: #f44336;
+            margin-top: 0;
+        }
+        .add-btn {
+            background-color: #2196F3;
+        }
+        .add-btn:hover {
+            background-color: #0b7dda;
+        }
+        .parameter-section {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        .parameter-fields {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .parameter-field {
+            display: flex;
+            margin-bottom: 5px;
+        }
+        .parameter-field input {
+            flex: 1;
+            margin-right: 5px;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .copy-btn {
+            background-color: #607d8b;
+            margin-bottom: 10px;
+        }
+        .copy-btn:hover {
+            background-color: #546e7a;
+        }
+        .success-message {
+            color: #4CAF50;
+            margin-top: 5px;
+            display: none;
+        }
+        .optional-label::after {
+            content: " (选填)";
+            font-weight: normal;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <h1>汽车信息配置工具 - 简化版</h1>
+    
+    <div class="container">
+        <div class="form-container">
+            <form id="carForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id">ID (不能重复)</label>
+                        <input type="number" id="id">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="title" class="optional-label">标题</label>
+                        <input type="text" id="title">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="price" class="optional-label">价格 (万元)</label>
+                        <input type="number" id="price" step="0.01">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="originalPrice" class="optional-label">原价 (万元)</label>
+                        <input type="number" id="originalPrice" step="0.01">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="year" class="optional-label">年份</label>
+                        <input type="text" id="year" placeholder="例如: 2019年">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mileage" class="optional-label">里程</label>
+                        <input type="text" id="mileage" placeholder="例如: 3.2万公里">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location" class="optional-label">地点</label>
+                        <input type="text" id="location" placeholder="例如: 北京">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="optional-label">标签</label>
+                    <div class="dynamic-fields" id="tagsContainer">
+                        <div class="dynamic-field">
+                            <input type="text" class="tag-input" placeholder="例如: 热门">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-btn" id="addTagBtn">添加标签</button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="thumbnail" class="optional-label">缩略图路径</label>
+                    <input type="text" id="thumbnail" placeholder="例如: images/cars/benz-c.jpg">
+                </div>
+                
+                <div class="form-group">
+                    <label class="optional-label">图片路径</label>
+                    <div class="dynamic-fields" id="imagesContainer">
+                        <div class="dynamic-field">
+                            <input type="text" class="image-input" placeholder="例如: images/cars/benz-c-1.jpg">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-btn" id="addImageBtn">添加图片</button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="optional-label">亮点</label>
+                    <div class="dynamic-fields" id="highlightsContainer">
+                        <div class="dynamic-field">
+                            <input type="text" class="highlight-input" placeholder="例如: 全景天窗">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-btn" id="addHighlightBtn">添加亮点</button>
+                </div>
+                
+                <h3 class="section-title">参数配置 (选填)</h3>
+                
+                <div class="parameter-section">
+                    <h4>基本信息</h4>
+                    <div class="parameter-fields" id="basicInfoContainer">
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="车型">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="上牌时间">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="表显里程">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="排量">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="变速箱">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="排放标准">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-btn" id="addBasicInfoBtn">添加基本信息</button>
+                </div>
+                
+                <div class="parameter-section">
+                    <h4>车辆配置</h4>
+                    <div class="parameter-fields" id="carConfigContainer">
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="座椅材质">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="天窗">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="导航">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="倒车影像">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="驾驶辅助">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="智能互联">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-btn" id="addCarConfigBtn">添加车辆配置</button>
+                </div>
+                
+                <div class="parameter-section">
+                    <h4>检测信息</h4>
+                    <div class="parameter-fields" id="inspectionContainer">
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="外观检测">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="内饰检测">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="发动机检测">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="底盘检测">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                        <div class="parameter-field">
+                            <input type="text" class="param-key" placeholder="参数名" value="电气系统">
+                            <input type="text" class="param-value" placeholder="参数值">
+                            <button type="button" class="remove-field">-</button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-btn" id="addInspectionBtn">添加检测信息</button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description" class="optional-label">车辆简介</label>
+                    <textarea id="description"></textarea>
+                </div>
+                
+                <button type="submit">添加车辆</button>
+            </form>
+        </div>
+        
+        <div class="output-container">
+            <h2>生成的JSON代码</h2>
+            <button type="button" class="copy-btn" id="copyBtn">复制代码</button>
+            <span class="success-message" id="copySuccess">复制成功!</span>
+            <pre id="jsonOutput">{
+  "id": 1001,
+  "thumbnail": "images/cars/example.jpg"
+}</pre>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化JSON输出区域
+            let carsData = [];
+            updateJsonOutput();
+            
+            // 添加动态字段的事件监听器
+            document.getElementById('addTagBtn').addEventListener('click', function() {
+                addDynamicField('tagsContainer', 'tag-input');
+            });
+            
+            document.getElementById('addImageBtn').addEventListener('click', function() {
+                addDynamicField('imagesContainer', 'image-input');
+            });
+            
+            document.getElementById('addHighlightBtn').addEventListener('click', function() {
+                addDynamicField('highlightsContainer', 'highlight-input');
+            });
+            
+            document.getElementById('addBasicInfoBtn').addEventListener('click', function() {
+                addParameterField('basicInfoContainer');
+            });
+            
+            document.getElementById('addCarConfigBtn').addEventListener('click', function() {
+                addParameterField('carConfigContainer');
+            });
+            
+            document.getElementById('addInspectionBtn').addEventListener('click', function() {
+                addParameterField('inspectionContainer');
+            });
+            
+            // 删除字段的事件委托
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-field')) {
+                    e.target.parentElement.remove();
+                }
+            });
+            
+            // 表单提交
+            document.getElementById('carForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // 获取ID
+                const idInput = document.getElementById('id').value;
+                if (!idInput) {
+                    alert('ID是必填项!');
+                    return;
+                }
+                
+                const id = parseInt(idInput);
+                
+                // 检查ID是否重复
+                if (carsData.some(car => car.id === id)) {
+                    alert('ID已存在，请使用不同的ID!');
+                    return;
+                }
+                
+                // 创建基本车辆对象
+                const car = {
+                    id: id
+                };
+                
+                // 添加其他非空字段
+                addNonEmptyField(car, 'title', document.getElementById('title').value);
+                
+                const priceValue = document.getElementById('price').value;
+                if (priceValue) {
+                    car.price = parseFloat(priceValue);
+                }
+                
+                const originalPriceValue = document.getElementById('originalPrice').value;
+                if (originalPriceValue) {
+                    car.originalPrice = parseFloat(originalPriceValue);
+                }
+                
+                addNonEmptyField(car, 'year', document.getElementById('year').value);
+                addNonEmptyField(car, 'mileage', document.getElementById('mileage').value);
+                addNonEmptyField(car, 'location', document.getElementById('location').value);
+                
+                // 添加数组字段
+                const tags = getArrayFromInputs('tag-input');
+                if (tags.length > 0) {
+                    car.tags = tags;
+                }
+                
+                addNonEmptyField(car, 'thumbnail', document.getElementById('thumbnail').value);
+                
+                const images = getArrayFromInputs('image-input');
+                if (images.length > 0) {
+                    car.images = images;
+                }
+                
+                const highlights = getArrayFromInputs('highlight-input');
+                if (highlights.length > 0) {
+                    car.highlights = highlights;
+                }
+                
+                // 添加参数对象
+                const parameters = {};
+                const basicInfo = getParametersObject('basicInfoContainer');
+                if (Object.keys(basicInfo).length > 0) {
+                    parameters['基本信息'] = basicInfo;
+                }
+                
+                const carConfig = getParametersObject('carConfigContainer');
+                if (Object.keys(carConfig).length > 0) {
+                    parameters['车辆配置'] = carConfig;
+                }
+                
+                const inspection = getParametersObject('inspectionContainer');
+                if (Object.keys(inspection).length > 0) {
+                    parameters['检测信息'] = inspection;
+                }
+                
+                if (Object.keys(parameters).length > 0) {
+                    car.parameters = parameters;
+                }
+                
+                addNonEmptyField(car, 'description', document.getElementById('description').value);
+                
+                // 添加到数据中
+                carsData.push(car);
+                
+                // 更新JSON输出
+                updateJsonOutput();
+                
+                // 重置ID和标题，保留其他字段以便快速添加类似车辆
+                document.getElementById('id').value = id + 1;
+                document.getElementById('title').value = '';
+                
+                alert('车辆信息已添加!');
+            });
+            
+            // 复制按钮
+            document.getElementById('copyBtn').addEventListener('click', function() {
+                const jsonText = document.getElementById('jsonOutput').textContent;
+                navigator.clipboard.writeText(jsonText).then(function() {
+                    const successMsg = document.getElementById('copySuccess');
+                    successMsg.style.display = 'inline';
+                    setTimeout(function() {
+                        successMsg.style.display = 'none';
+                    }, 2000);
+                });
+            });
+            
+            // 辅助函数
+            function addDynamicField(containerId, inputClass) {
+                const container = document.getElementById(containerId);
+                const field = document.createElement('div');
+                field.className = 'dynamic-field';
+                field.innerHTML = `
+                    <input type="text" class="${inputClass}" placeholder="输入值">
+                    <button type="button" class="remove-field">-</button>
+                `;
+                container.appendChild(field);
+            }
+            
+            function addParameterField(containerId) {
+                const container = document.getElementById(containerId);
+                const field = document.createElement('div');
+                field.className = 'parameter-field';
+                field.innerHTML = `
+                    <input type="text" class="param-key" placeholder="参数名">
+                    <input type="text" class="param-value" placeholder="参数值">
+                    <button type="button" class="remove-field">-</button>
+                `;
+                container.appendChild(field);
+            }
+            
+            function getArrayFromInputs(className) {
+                const inputs = document.getElementsByClassName(className);
+                const values = [];
+                
+                for (let input of inputs) {
+                    if (input.value.trim()) {
+                        values.push(input.value.trim());
+                    }
+                }
+                
+                return values;
+            }
+            
+            function getParametersObject(containerId) {
+                const container = document.getElementById(containerId);
+                const fields = container.getElementsByClassName('parameter-field');
+                const params = {};
+                
+                for (let field of fields) {
+                    const key = field.querySelector('.param-key').value.trim();
+                    const value = field.querySelector('.param-value').value.trim();
+                    
+                    if (key && value) {
+                        params[key] = value;
+                    }
+                }
+                
+                return params;
+            }
+            
+            function addNonEmptyField(obj, key, value) {
+                if (value && value.trim()) {
+                    obj[key] = value.trim();
+                }
+            }
+            
+            function updateJsonOutput() {
+                const jsonOutput = document.getElementById('jsonOutput');
+                // 显示所有车辆信息，每个车辆对象独立显示
+                if (carsData.length > 0) {
+                    const output = carsData.map(car => JSON.stringify(car, null, 2)).join(',\n\n');
+                    jsonOutput.textContent = output;
+                } else {
+                    jsonOutput.textContent = '{\n  "id": 1001,\n  "thumbnail": "images/cars/example.jpg"\n}';
+                }
+            }
+        });
+    </script>
+</body>
+>>>>>>> acfea0472b18a2ed4b33ad209ff0cf7d28f53b27
 </html>
