@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>车辆详情 - 阿敬淘车</title>
     <meta name="description" content="提供优质二手车买卖、评估、金融服务的专业平台">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -38,6 +38,44 @@
         }
         .gallery-main {
             position: relative;
+            overflow: hidden;
+        }
+        
+        /* 轮播图滑动容器 */
+        .gallery-slider {
+            display: flex;
+            transition: transform 0.3s ease;
+            width: 100%;
+        }
+        
+        .gallery-slide {
+            flex: 0 0 100%;
+            width: 100%;
+        }
+        
+        .gallery-slide img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .gallery-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            
+            .detail-meta {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            
+            .meta-item {
+                margin-right: 15px;
+                margin-bottom: 10px;
+            }
         }
     </style>
 </head>
@@ -66,7 +104,10 @@
             <!-- 图片画廊 -->
             <div class="detail-gallery">
                 <div class="gallery-main">
-                    <!-- 主图将通过JavaScript动态加载 -->
+                    <!-- 修改为滑动容器 -->
+                    <div class="gallery-slider">
+                        <!-- 轮播图将通过JavaScript动态加载 -->
+                    </div>
                     <!-- 添加左右切换按钮 -->
                     <button class="gallery-nav gallery-prev"><i class="fas fa-chevron-left"></i></button>
                     <button class="gallery-nav gallery-next"><i class="fas fa-chevron-right"></i></button>
@@ -81,14 +122,7 @@
                 <div class="detail-header">
                     <h1 class="detail-title"><!-- 标题将通过JavaScript动态加载 --></h1>
                     <div class="detail-meta">
-                        <div class="meta-item">
-                            <span class="meta-icon"><i class="fas fa-calendar-alt"></i></span>
-                            <span class="meta-value"><!-- 年份将通过JavaScript动态加载 --></span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-icon"><i class="fas fa-road"></i></span>
-                            <span class="meta-value"><!-- 里程将通过JavaScript动态加载 --></span>
-                        </div>
+                        <!-- 基本信息将通过JavaScript动态加载 -->
                     </div>
                     <div class="detail-tags">
                         <!-- 标签将通过JavaScript动态加载 -->
@@ -132,5 +166,114 @@
     </footer>
 
     <script src="js/main.js"></script>
+    <script>
+        // 移动端菜单切换
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+        
+        // 轮播图触摸滑动
+        document.addEventListener('DOMContentLoaded', function() {
+            let gallerySlider = document.querySelector('.gallery-slider');
+            if (!gallerySlider) return;
+            
+            let startX, moveX, currentIndex = 0;
+            let slideCount = 0; // 将在加载图片后更新
+            
+            // 触摸事件
+            gallerySlider.addEventListener('touchstart', function(e) {
+                startX = e.touches[0].clientX;
+                gallerySlider.style.transition = 'none';
+            });
+            
+            gallerySlider.addEventListener('touchmove', function(e) {
+                if (!startX) return;
+                moveX = e.touches[0].clientX;
+                const diff = moveX - startX;
+                
+                // 防止第一张和最后一张继续滑动
+                if ((currentIndex === 0 && diff > 0) || (currentIndex === slideCount - 1 && diff < 0)) {
+                    return;
+                }
+                
+                gallerySlider.style.transform = `translateX(calc(-${currentIndex * 100}% + ${diff}px))`;
+            });
+            
+            gallerySlider.addEventListener('touchend', function(e) {
+                if (!startX || !moveX) {
+                    startX = null;
+                    moveX = null;
+                    return;
+                }
+                
+                const diff = moveX - startX;
+                gallerySlider.style.transition = 'transform 0.3s ease';
+                
+                // 判断滑动方向和距离
+                if (diff < -50 && currentIndex < slideCount - 1) {
+                    currentIndex++;
+                } else if (diff > 50 && currentIndex > 0) {
+                    currentIndex--;
+                }
+                
+                gallerySlider.style.transform = `translateX(-${currentIndex * 100}%)`;
+                
+                // 更新缩略图激活状态
+                document.querySelectorAll('.gallery-thumb').forEach((thumb, i) => {
+                    if (i === currentIndex) {
+                        thumb.classList.add('active');
+                    } else {
+                        thumb.classList.remove('active');
+                    }
+                });
+                
+                startX = null;
+                moveX = null;
+            });
+            
+            // 按钮点击事件
+            const prevButton = document.querySelector('.gallery-prev');
+            const nextButton = document.querySelector('.gallery-next');
+            
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', function() {
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        gallerySlider.style.transition = 'transform 0.3s ease';
+                        gallerySlider.style.transform = `translateX(-${currentIndex * 100}%)`;
+                        
+                        // 更新缩略图激活状态
+                        document.querySelectorAll('.gallery-thumb').forEach((thumb, i) => {
+                            thumb.classList.toggle('active', i === currentIndex);
+                        });
+                    }
+                });
+                
+                nextButton.addEventListener('click', function() {
+                    if (currentIndex < slideCount - 1) {
+                        currentIndex++;
+                        gallerySlider.style.transition = 'transform 0.3s ease';
+                        gallerySlider.style.transform = `translateX(-${currentIndex * 100}%)`;
+                        
+                        // 更新缩略图激活状态
+                        document.querySelectorAll('.gallery-thumb').forEach((thumb, i) => {
+                            thumb.classList.toggle('active', i === currentIndex);
+                        });
+                    }
+                });
+            }
+            
+            // 监听图片加载完成，更新slideCount
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                        slideCount = gallerySlider.children.length;
+                    }
+                });
+            });
+            
+            observer.observe(gallerySlider, { childList: true });
+        });
+    </script>
 </body>
 </html>

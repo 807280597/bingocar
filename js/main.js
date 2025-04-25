@@ -232,13 +232,20 @@ function renderCarDetail(car) {
     document.title = car.title + ' - 阿敬淘车';
     
     // 渲染图片画廊
-    const galleryMain = document.querySelector('.gallery-main');
+    const gallerySlider = document.querySelector('.gallery-slider');
     const galleryThumbs = document.querySelector('.gallery-thumbs');
     
-    if (galleryMain && galleryThumbs && car.images && car.images.length > 0) {
-        // 初始化主图（保留导航按钮）
-        const navButtons = galleryMain.innerHTML;
-        galleryMain.innerHTML = `<img src="${car.images[0]}" alt="${car.title}">` + navButtons;
+    if (gallerySlider && galleryThumbs && car.images && car.images.length > 0) {
+        // 清空轮播容器
+        gallerySlider.innerHTML = '';
+        
+        // 添加所有轮播图片
+        car.images.forEach((image, index) => {
+            const slide = document.createElement('div');
+            slide.className = 'gallery-slide';
+            slide.innerHTML = `<img src="${image}" alt="${car.title} - 图片${index + 1}">`;
+            gallerySlider.appendChild(slide);
+        });
         
         // 清空缩略图容器
         galleryThumbs.innerHTML = '';
@@ -250,31 +257,36 @@ function renderCarDetail(car) {
             thumb.innerHTML = `<img src="${image}" alt="${car.title} - 图片${index + 1}">`;
             
             thumb.addEventListener('click', () => {
-                // 更新主图
-                updateMainImage(image, car.title);
+                // 更新轮播图位置
+                gallerySlider.style.transition = 'transform 0.3s ease';
+                gallerySlider.style.transform = `translateX(-${index * 100}%)`;
                 
                 // 更新缩略图激活状态
                 document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
                 thumb.classList.add('active');
                 
-                // 更新当前索引（用于自动轮播）
-                currentImageIndex = index;
+                // 更新当前索引（用于自动轮播和滑动）
+                window.currentIndex = index;
             });
             
             galleryThumbs.appendChild(thumb);
         });
         
+        // 初始化当前索引
+        window.currentIndex = 0;
+        window.slideCount = car.images.length;
+        
         // 自动轮播图片
-        let currentImageIndex = 0;
         const autoSlideInterval = setInterval(() => {
-            currentImageIndex = (currentImageIndex + 1) % car.images.length;
+            window.currentIndex = (window.currentIndex + 1) % car.images.length;
             
-            // 更新主图
-            updateMainImage(car.images[currentImageIndex], car.title);
+            // 更新轮播图位置
+            gallerySlider.style.transition = 'transform 0.3s ease';
+            gallerySlider.style.transform = `translateX(-${window.currentIndex * 100}%)`;
             
             // 更新缩略图激活状态
             document.querySelectorAll('.gallery-thumb').forEach((t, i) => {
-                if (i === currentImageIndex) {
+                if (i === window.currentIndex) {
                     t.classList.add('active');
                 } else {
                     t.classList.remove('active');
@@ -282,60 +294,10 @@ function renderCarDetail(car) {
             });
         }, 3000); // 3秒切换一次
         
-        // 添加左右切换按钮事件
-        const prevButton = document.querySelector('.gallery-prev');
-        const nextButton = document.querySelector('.gallery-next');
-        
-        if (prevButton && nextButton) {
-            prevButton.addEventListener('click', () => {
-                currentImageIndex = (currentImageIndex - 1 + car.images.length) % car.images.length;
-                
-                // 更新主图
-                updateMainImage(car.images[currentImageIndex], car.title);
-                
-                // 更新缩略图激活状态
-                document.querySelectorAll('.gallery-thumb').forEach((t, i) => {
-                    if (i === currentImageIndex) {
-                        t.classList.add('active');
-                    } else {
-                        t.classList.remove('active');
-                    }
-                });
-            });
-            
-            nextButton.addEventListener('click', () => {
-                currentImageIndex = (currentImageIndex + 1) % car.images.length;
-                
-                // 更新主图
-                updateMainImage(car.images[currentImageIndex], car.title);
-                
-                // 更新缩略图激活状态
-                document.querySelectorAll('.gallery-thumb').forEach((t, i) => {
-                    if (i === currentImageIndex) {
-                        t.classList.add('active');
-                    } else {
-                        t.classList.remove('active');
-                    }
-                });
-            });
-        }
-        
         // 当用户离开页面时清除定时器
         window.addEventListener('beforeunload', () => {
             clearInterval(autoSlideInterval);
         });
-    }
-    
-    // 更新主图的辅助函数
-    function updateMainImage(imageSrc, altText) {
-        const mainImage = galleryMain.querySelector('img');
-        if (mainImage) {
-            mainImage.src = imageSrc;
-            mainImage.alt = altText;
-        } else {
-            const navButtons = galleryMain.innerHTML;
-            galleryMain.innerHTML = `<img src="${imageSrc}" alt="${altText}">` + navButtons;
-        }
     }
     
     // 渲染基本信息
