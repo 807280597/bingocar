@@ -29,7 +29,7 @@ function initCarousel() {
     dots[0].classList.add('active');
     
     // 自动轮播
-    setInterval(() => {
+    const autoSlideInterval = setInterval(() => {
         items[currentIndex].classList.remove('active');
         dots[currentIndex].classList.remove('active');
         
@@ -50,6 +50,47 @@ function initCarousel() {
             items[currentIndex].classList.add('active');
             dots[currentIndex].classList.add('active');
         });
+    });
+    
+    // 添加触摸滑动支持
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    carousel.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, false);
+    
+    carousel.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, false);
+    
+    function handleSwipe() {
+        // 检测滑动方向
+        if (touchEndX < touchStartX) {
+            // 向左滑动 - 下一张
+            items[currentIndex].classList.remove('active');
+            dots[currentIndex].classList.remove('active');
+            
+            currentIndex = (currentIndex + 1) % items.length;
+            
+            items[currentIndex].classList.add('active');
+            dots[currentIndex].classList.add('active');
+        } else if (touchEndX > touchStartX) {
+            // 向右滑动 - 上一张
+            items[currentIndex].classList.remove('active');
+            dots[currentIndex].classList.remove('active');
+            
+            currentIndex = (currentIndex - 1 + items.length) % items.length;
+            
+            items[currentIndex].classList.add('active');
+            dots[currentIndex].classList.add('active');
+        }
+    }
+    
+    // 当用户离开页面时清除定时器
+    window.addEventListener('beforeunload', () => {
+        clearInterval(autoSlideInterval);
     });
 }
 

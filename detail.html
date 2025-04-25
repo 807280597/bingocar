@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>车辆详情 - 阿敬淘车</title>
     <meta name="description" content="提供优质二手车买卖、评估、金融服务的专业平台">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -16,28 +16,43 @@
             background: rgba(0, 0, 0, 0.5);
             color: white;
             border: none;
-            width: 50px;  /* 增加宽度 */
-            height: 50px; /* 增加高度 */
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            font-size: 24px; /* 增加图标大小 */
+            font-size: 24px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
-            z-index: 10; /* 确保按钮在图片上层 */
+            z-index: 10;
         }
         .gallery-nav:hover {
             background: rgba(0, 0, 0, 0.8);
         }
         .gallery-prev {
-            left: 15px; /* 调整位置 */
+            left: 15px;
         }
         .gallery-next {
-            right: 15px; /* 调整位置 */
+            right: 15px;
         }
         .gallery-main {
             position: relative;
+        }
+        
+        /* 移动端适配样式 */
+        @media (max-width: 768px) {
+            .gallery-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            .gallery-prev {
+                left: 10px;
+            }
+            .gallery-next {
+                right: 10px;
+            }
         }
     </style>
 </head>
@@ -50,7 +65,7 @@
             </div>
             <nav>
                 <ul class="nav-menu">
-                    <li><a href="#">联系电话：郭生（Monchy Guo） 13590104056（微信同号）</a></li>
+                    <li><a href="#">联系电话：郭生 13590104056</a></li>
                 </ul>
                 <button class="mobile-menu-btn">
                     <i class="fas fa-bars"></i>
@@ -81,14 +96,7 @@
                 <div class="detail-header">
                     <h1 class="detail-title"><!-- 标题将通过JavaScript动态加载 --></h1>
                     <div class="detail-meta">
-                        <div class="meta-item">
-                            <span class="meta-icon"><i class="fas fa-calendar-alt"></i></span>
-                            <span class="meta-value"><!-- 年份将通过JavaScript动态加载 --></span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-icon"><i class="fas fa-road"></i></span>
-                            <span class="meta-value"><!-- 里程将通过JavaScript动态加载 --></span>
-                        </div>
+                        <!-- 基本信息将通过JavaScript动态加载 -->
                     </div>
                     <div class="detail-tags">
                         <!-- 标签将通过JavaScript动态加载 -->
@@ -125,7 +133,7 @@
                 <div class="footer-info">
                     <h3>阿敬淘车</h3>
                     <p>提供优质二手车买卖、评估的专业平台</p>
-                    <p>联系电话：郭生（Monchy Guo） 13590104056（微信同号）</p>
+                    <p>联系电话：郭生 13590104056</p>
                 </div>
             </div>
         </div>
