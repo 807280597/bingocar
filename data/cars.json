@@ -3,6 +3,7 @@
     {
         "id": 1001,
         "title": "丰田雷凌双擎 1.8HGS-V E-CVT尊贵版",
+        "category": "雷凌",
         "year": "2018",
         "mileage": "3.5万公里",
         "tags": ["混动", "省油", "热门"],
@@ -25,6 +26,7 @@
       {
         "id": 1002,
         "title": "2018年卡罗拉双擎 E-CVT领先版",
+        "category": "卡罗拉",
         "year": "2018",
         "mileage": "6",
         "thumbnail": "/images/Car/2018一汽丰田卡罗拉 双擎/卡罗拉 双擎-1.jpg",
@@ -48,6 +50,7 @@
       {
         "id": 1003,
         "title": "2019广汽本田奥德赛 2.0锐混动尊享版",
+        "category": "奥德赛",
         "year": "2019",
         "thumbnail": "/images/Car/2019广汽本田 奥德赛/奥德赛-1.jpg",
         "images": [
@@ -75,6 +78,7 @@
       {
         "id": 1004,
         "title": "2019年广汽本田 雅阁 锐酷混动版",
+        "category": "雅阁",
         "year": "2019",
         "mileage": "6.3万公里",
         "thumbnail": "/images/Car/2019广汽本田雅阁 混动/雅阁-1.jpg",
@@ -101,6 +105,7 @@
       {
         "id": 1005,
         "title": "2021年东风日产天籁",
+        "category": "天籁",
         "year": "2021",
         "mileage": "9万公里",
         "thumbnail": "/images/Car/2021东风日产天籁/天籁-1.jpg",
@@ -124,6 +129,7 @@
       {
         "id": 1006,
         "title": "2021年广汽本田 凌派 180Turbo CVT舒适版",
+        "category": "凌派",
         "year": "2021",
         "mileage": "6万公里",
         "thumbnail": "/images/Car/2021广汽本田 凌派/凌派-1.jpg",
