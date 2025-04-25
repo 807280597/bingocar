@@ -191,7 +191,7 @@ function loadCarDetail() {
 // 渲染车辆详情
 function renderCarDetail(car) {
     // 设置页面标题
-    document.title = car.title + ' - 优选汽车';
+    document.title = car.title + ' - 阿敬淘车';
     
     // 渲染图片画廊
     const galleryMain = document.querySelector('.gallery-main');
