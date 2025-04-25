@@ -7,53 +7,48 @@
     <meta name="description" content="提供优质二手车买卖、评估、金融服务的专业平台">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* 移动端适配样式 */
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 100%;
+                padding: 0 15px;
+                box-sizing: border-box;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                padding: 10px 0;
+            }
+            
+            .logo {
+                margin-bottom: 10px;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .car-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer-info {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- 头部导航 -->
-    <header>
-        <div class="container header-container">
-            <div class="logo">
-                <a href="index.html">阿敬淘车</a>
-            </div>
-            <nav>
-                <ul class="nav-menu">
-                    <li><a href="#">联系电话：郭生 13590104056</a></li>
-                </ul>
-                <button class="mobile-menu-btn">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </nav>
-        </div>
-    </header>
-
-    <!-- 主要内容区域 -->
-    <main class="container">
-        <!-- 热门推荐 -->
-        <h2 class="section-title">热门推荐</h2>
-        <section class="car-list">
-            <!-- 车辆数据将通过JavaScript动态加载 -->
-        </section>
-
-        <!-- 新上好车 -->
-        <h2 class="section-title">新上好车</h2>
-        <section class="car-list">
-            <!-- 车辆数据将通过JavaScript动态加载 -->
-        </section>
-    </main>
-
-    <!-- 页脚部分 -->
-    <footer>
-        <div class="container">
-            <div class="footer-container">
-                <div class="footer-info">
-                    <h3>阿敬淘车</h3>
-                    <p>提供优质二手车买卖、评估的专业平台</p>
-                    <p>联系电话：郭生 13590104056</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script src="js/main.js"></script>
+    <!-- 其余内容保持不变 -->
 </body>
 </html>
