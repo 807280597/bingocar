@@ -233,12 +233,26 @@ function renderCarDetail(car) {
     
     // 渲染图片画廊
     const galleryMain = document.querySelector('.gallery-main');
+    const gallerySlider = document.querySelector('.gallery-slider');
     const galleryThumbs = document.querySelector('.gallery-thumbs');
     
     if (galleryMain && galleryThumbs && car.images && car.images.length > 0) {
-        // 初始化主图（保留导航按钮）
-        const navButtons = galleryMain.innerHTML;
-        galleryMain.innerHTML = `<img src="${car.images[0]}" alt="${car.title}">` + navButtons;
+        // 初始化滑动容器
+        if (gallerySlider) {
+            gallerySlider.innerHTML = '';
+            
+            // 添加所有滑动图片
+            car.images.forEach((image, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'gallery-slide';
+                slide.innerHTML = `<img src="${image}" alt="${car.title} - 图片${index + 1}">`;
+                gallerySlider.appendChild(slide);
+            });
+        }
+        
+        // 保留原有的按钮（在移动端通过CSS隐藏）
+        const prevButton = document.querySelector('.gallery-prev');
+        const nextButton = document.querySelector('.gallery-next');
         
         // 清空缩略图容器
         galleryThumbs.innerHTML = '';
@@ -250,8 +264,11 @@ function renderCarDetail(car) {
             thumb.innerHTML = `<img src="${image}" alt="${car.title} - 图片${index + 1}">`;
             
             thumb.addEventListener('click', () => {
-                // 更新主图
-                updateMainImage(image, car.title);
+                // 更新滑动位置
+                if (gallerySlider) {
+                    gallerySlider.style.transition = 'transform 0.3s ease';
+                    gallerySlider.style.transform = `translateX(-${index * 100}%)`;
+                }
                 
                 // 更新缩略图激活状态
                 document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
@@ -269,8 +286,11 @@ function renderCarDetail(car) {
         const autoSlideInterval = setInterval(() => {
             currentImageIndex = (currentImageIndex + 1) % car.images.length;
             
-            // 更新主图
-            updateMainImage(car.images[currentImageIndex], car.title);
+            // 更新滑动位置
+            if (gallerySlider) {
+                gallerySlider.style.transition = 'transform 0.3s ease';
+                gallerySlider.style.transform = `translateX(-${currentImageIndex * 100}%)`;
+            }
             
             // 更新缩略图激活状态
             document.querySelectorAll('.gallery-thumb').forEach((t, i) => {
@@ -283,15 +303,15 @@ function renderCarDetail(car) {
         }, 3000); // 3秒切换一次
         
         // 添加左右切换按钮事件
-        const prevButton = document.querySelector('.gallery-prev');
-        const nextButton = document.querySelector('.gallery-next');
-        
         if (prevButton && nextButton) {
             prevButton.addEventListener('click', () => {
                 currentImageIndex = (currentImageIndex - 1 + car.images.length) % car.images.length;
                 
-                // 更新主图
-                updateMainImage(car.images[currentImageIndex], car.title);
+                // 更新滑动位置
+                if (gallerySlider) {
+                    gallerySlider.style.transition = 'transform 0.3s ease';
+                    gallerySlider.style.transform = `translateX(-${currentImageIndex * 100}%)`;
+                }
                 
                 // 更新缩略图激活状态
                 document.querySelectorAll('.gallery-thumb').forEach((t, i) => {
@@ -306,8 +326,11 @@ function renderCarDetail(car) {
             nextButton.addEventListener('click', () => {
                 currentImageIndex = (currentImageIndex + 1) % car.images.length;
                 
-                // 更新主图
-                updateMainImage(car.images[currentImageIndex], car.title);
+                // 更新滑动位置
+                if (gallerySlider) {
+                    gallerySlider.style.transition = 'transform 0.3s ease';
+                    gallerySlider.style.transform = `translateX(-${currentImageIndex * 100}%)`;
+                }
                 
                 // 更新缩略图激活状态
                 document.querySelectorAll('.gallery-thumb').forEach((t, i) => {

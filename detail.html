@@ -39,6 +39,38 @@
         .gallery-main {
             position: relative;
         }
+        
+        /* 添加触摸滑动相关样式 */
+        .gallery-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .gallery-slider {
+            display: flex;
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        
+        .gallery-slide {
+            flex: 0 0 100%;
+            height: 100%;
+        }
+        
+        .gallery-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* 移动端适配样式 */
+        @media (max-width: 768px) {
+            .gallery-nav {
+                display: none; /* 在移动端隐藏左右切换按钮 */
+            }
+        }
     </style>
 </head>
 <body>
@@ -66,8 +98,13 @@
             <!-- 图片画廊 -->
             <div class="detail-gallery">
                 <div class="gallery-main">
-                    <!-- 主图将通过JavaScript动态加载 -->
-                    <!-- 添加左右切换按钮 -->
+                    <!-- 修改为支持触摸滑动的结构 -->
+                    <div class="gallery-container">
+                        <div class="gallery-slider">
+                            <!-- 滑动图片将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
+                    <!-- 保留按钮，在移动端通过CSS隐藏 -->
                     <button class="gallery-nav gallery-prev"><i class="fas fa-chevron-left"></i></button>
                     <button class="gallery-nav gallery-next"><i class="fas fa-chevron-right"></i></button>
                 </div>
@@ -132,5 +169,122 @@
     </footer>
 
     <script src="js/main.js"></script>
+    <script>
+        // 添加触摸滑动功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 等待main.js加载完车辆数据后再初始化触摸滑动
+            setTimeout(initTouchSlider, 1000);
+        });
+        
+        function initTouchSlider() {
+            const slider = document.querySelector('.gallery-slider');
+            if (!slider) return;
+            
+            let startX;
+            let currentTranslate = 0;
+            let prevTranslate = 0;
+            let isDragging = false;
+            let currentIndex = 0;
+            const slides = document.querySelectorAll('.gallery-slide');
+            const slideCount = slides.length;
+            
+            if (slideCount <= 1) return; // 如果只有一张图片，不需要滑动功能
+            
+            // 触摸事件
+            slider.addEventListener('touchstart', touchStart);
+            slider.addEventListener('touchmove', touchMove);
+            slider.addEventListener('touchend', touchEnd);
+            
+            // 鼠标事件（用于桌面端测试）
+            slider.addEventListener('mousedown', touchStart);
+            slider.addEventListener('mousemove', touchMove);
+            slider.addEventListener('mouseup', touchEnd);
+            slider.addEventListener('mouseleave', touchEnd);
+            
+            function touchStart(event) {
+                startX = getPositionX(event);
+                isDragging = true;
+                slider.style.transition = 'none';
+            }
+            
+            function touchMove(event) {
+                if (!isDragging) return;
+                
+                const currentX = getPositionX(event);
+                const diff = currentX - startX;
+                currentTranslate = prevTranslate + diff;
+                
+                // 限制滑动范围
+                if (currentTranslate > 0) {
+                    currentTranslate = 0;
+                } else if (currentTranslate < -(slideCount - 1) * slider.clientWidth) {
+                    currentTranslate = -(slideCount - 1) * slider.clientWidth;
+                }
+                
+                setSliderPosition(currentTranslate);
+            }
+            
+            function touchEnd() {
+                isDragging = false;
+                slider.style.transition = 'transform 0.3s ease';
+                
+                const movedBy = currentTranslate - prevTranslate;
+                
+                // 如果移动距离足够大，则切换到下一张或上一张
+                if (movedBy < -100 && currentIndex < slideCount - 1) {
+                    currentIndex++;
+                } else if (movedBy > 100 && currentIndex > 0) {
+                    currentIndex--;
+                }
+                
+                currentTranslate = -currentIndex * slider.clientWidth;
+                prevTranslate = currentTranslate;
+                setSliderPosition(currentTranslate);
+                
+                // 更新缩略图激活状态
+                updateThumbnails();
+            }
+            
+            function getPositionX(event) {
+                return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+            }
+            
+            function setSliderPosition(translate) {
+                slider.style.transform = `translateX(${translate}px)`;
+            }
+            
+            function updateThumbnails() {
+                const thumbs = document.querySelectorAll('.gallery-thumb');
+                thumbs.forEach((thumb, index) => {
+                    if (index === currentIndex) {
+                        thumb.classList.add('active');
+                    } else {
+                        thumb.classList.remove('active');
+                    }
+                });
+            }
+            
+            // 点击缩略图切换
+            const thumbs = document.querySelectorAll('.gallery-thumb');
+            thumbs.forEach((thumb, index) => {
+                thumb.addEventListener('click', () => {
+                    currentIndex = index;
+                    currentTranslate = -currentIndex * slider.clientWidth;
+                    prevTranslate = currentTranslate;
+                    slider.style.transition = 'transform 0.3s ease';
+                    setSliderPosition(currentTranslate);
+                    updateThumbnails();
+                });
+            });
+            
+            // 自动调整大小
+            window.addEventListener('resize', () => {
+                slider.style.transition = 'none';
+                currentTranslate = -currentIndex * slider.clientWidth;
+                prevTranslate = currentTranslate;
+                setSliderPosition(currentTranslate);
+            });
+        }
+    </script>
 </body>
 </html>

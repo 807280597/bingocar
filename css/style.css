@@ -321,6 +321,9 @@ header {
 
 .gallery-main {
     height: 100%;
+    position: relative;
+    overflow: hidden;
+    touch-action: pan-y; /* 允许垂直平移，但水平滑动会被捕获 */
 }
 
 .gallery-main img {
@@ -357,6 +360,81 @@ header {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+/* 添加移动端适配样式 */
+@media (max-width: 768px) {
+    .detail-gallery {
+        height: 300px; /* 移动端降低轮播图高度 */
+    }
+    
+    .gallery-nav {
+        display: none; /* 在移动端隐藏左右切换按钮 */
+    }
+    
+    .gallery-thumbs {
+        bottom: 10px;
+        gap: 5px;
+    }
+    
+    .gallery-thumb {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .detail-info {
+        padding: 15px;
+    }
+    
+    .detail-title {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    
+    .detail-meta {
+        gap: 10px;
+    }
+    
+    .parameter-list {
+        grid-template-columns: 1fr; /* 参数列表在移动端单列显示 */
+    }
+    
+    .car-list {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
+
+/* 其他移动端适配样式 */
+@media (max-width: 576px) {
+    .header-container {
+        padding: 10px 0;
+    }
+    
+    .logo {
+        font-size: 20px;
+    }
+    
+    .nav-menu {
+        display: none;
+    }
+    
+    .mobile-menu-btn {
+        display: block;
+    }
+    
+    .section-title {
+        font-size: 20px;
+        margin: 30px 0 15px;
+    }
+    
+    .detail-highlights {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .highlight-item {
+        width: 100%;
+    }
 }
 
 .detail-info {
