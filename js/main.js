@@ -195,14 +195,14 @@ function loadCarDetail() {
                 car.images = car.images || [];
                 
                 renderCarDetail(car);
-                // 检查recommendCars是否存在
-                if (data.recommendCars && Array.isArray(data.recommendCars)) {
-                    renderRecommendCars(data.recommendCars);
-                } else {
-                    // 如果没有推荐车辆，可以使用其他车辆作为推荐
-                    const otherCars = data.cars.filter(c => c.id != carId).slice(0, 4);
-                    renderRecommendCars(otherCars);
-                }
+                
+                // 随机推荐3辆车（不包括当前车辆）
+                const otherCars = data.cars.filter(c => c.id != carId);
+                // 随机打乱数组
+                const shuffledCars = shuffleArray(otherCars);
+                // 取前3辆车作为推荐
+                const randomRecommendCars = shuffledCars.slice(0, 3);
+                renderRecommendCars(randomRecommendCars);
             } else {
                 console.error('未找到对应ID的车辆:', carId);
                 // 显示错误信息
@@ -216,6 +216,16 @@ function loadCarDetail() {
         });
 }
 
+// 随机打乱数组的函数
+function shuffleArray(array) {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+}
+
 // 渲染车辆详情
 function renderCarDetail(car) {
     // 设置页面标题
@@ -226,8 +236,13 @@ function renderCarDetail(car) {
     const galleryThumbs = document.querySelector('.gallery-thumbs');
     
     if (galleryMain && galleryThumbs && car.images && car.images.length > 0) {
+        // 初始化主图
         galleryMain.innerHTML = `<img src="${car.images[0]}" alt="${car.title}">`;
         
+        // 清空缩略图容器
+        galleryThumbs.innerHTML = '';
+        
+        // 添加所有缩略图
         car.images.forEach((image, index) => {
             const thumb = document.createElement('div');
             thumb.className = `gallery-thumb ${index === 0 ? 'active' : ''}`;
@@ -240,29 +255,49 @@ function renderCarDetail(car) {
                 // 更新缩略图激活状态
                 document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
                 thumb.classList.add('active');
+                
+                // 更新当前索引（用于自动轮播）
+                currentImageIndex = index;
             });
             
             galleryThumbs.appendChild(thumb);
+        });
+        
+        // 自动轮播图片
+        let currentImageIndex = 0;
+        const autoSlideInterval = setInterval(() => {
+            currentImageIndex = (currentImageIndex + 1) % car.images.length;
+            
+            // 更新主图
+            galleryMain.innerHTML = `<img src="${car.images[currentImageIndex]}" alt="${car.title}">`;
+            
+            // 更新缩略图激活状态
+            document.querySelectorAll('.gallery-thumb').forEach((t, i) => {
+                if (i === currentImageIndex) {
+                    t.classList.add('active');
+                } else {
+                    t.classList.remove('active');
+                }
+            });
+        }, 3000); // 3秒切换一次
+        
+        // 当用户离开页面时清除定时器
+        window.addEventListener('beforeunload', () => {
+            clearInterval(autoSlideInterval);
         });
     }
     
     // 渲染基本信息
     document.querySelector('.detail-title').textContent = car.title || '';
     
-    if (car.price) {
-        document.querySelector('.detail-price').textContent = car.price + '万';
-    }
-    
-    if (car.originalPrice) {
-        document.querySelector('.detail-original-price').textContent = car.originalPrice + '万';
-    }
+    // 移除价格相关代码
     
     // 渲染元数据
     const metaItems = document.querySelectorAll('.meta-item');
-    if (metaItems.length >= 3) {
+    if (metaItems.length >= 2) {
         metaItems[0].querySelector('.meta-value').textContent = car.year || '';
         metaItems[1].querySelector('.meta-value').textContent = car.mileage || '';
-        metaItems[2].querySelector('.meta-value').textContent = car.location || '';
+        // 移除地点相关代码
     }
     
     // 渲染标签
