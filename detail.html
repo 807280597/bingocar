@@ -2,13 +2,13 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>车辆详情 - 阿敬淘车</title>
     <meta name="description" content="提供优质二手车买卖、评估、金融服务的专业平台">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* 添加图片切换按钮样式 */
+        /* 放大图片切换按钮样式 */
         .gallery-nav {
             position: absolute;
             top: 50%;
@@ -16,27 +16,45 @@
             background: rgba(0, 0, 0, 0.5);
             color: white;
             border: none;
-            width: 40px;
-            height: 40px;
+            width: 50px;  /* 增加宽度 */
+            height: 50px; /* 增加高度 */
             border-radius: 50%;
-            font-size: 18px;
+            font-size: 24px; /* 增加图标大小 */
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
+            z-index: 10; /* 确保按钮在图片上层 */
         }
         .gallery-nav:hover {
             background: rgba(0, 0, 0, 0.8);
         }
         .gallery-prev {
-            left: 10px;
+            left: 15px; /* 调整位置 */
         }
         .gallery-next {
-            right: 10px;
+            right: 15px; /* 调整位置 */
         }
         .gallery-main {
             position: relative;
+        }
+        
+        /* 移动端图片导航按钮调整 */
+        @media screen and (max-width: 768px) {
+            .gallery-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            
+            .gallery-prev {
+                left: 10px;
+            }
+            
+            .gallery-next {
+                right: 10px;
+            }
         }
     </style>
 </head>

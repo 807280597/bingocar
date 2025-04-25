@@ -341,7 +341,7 @@ function renderCarDetail(car) {
     // 渲染基本信息
     document.querySelector('.detail-title').textContent = car.title || '';
     
-    // 渲染元数据 - 只显示有值的字段
+    // 渲染元数据 - 显示年份、里程和排量
     const metaContainer = document.querySelector('.detail-meta');
     metaContainer.innerHTML = '';
     
@@ -467,5 +467,12 @@ function initMobileMenu() {
     
     menuBtn.addEventListener('click', () => {
         navMenu.classList.toggle('active');
+        // 添加点击其他区域关闭菜单的功能
+        document.addEventListener('click', function closeMenu(e) {
+            if (!menuBtn.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+                document.removeEventListener('click', closeMenu);
+            }
+        });
     });
 }
