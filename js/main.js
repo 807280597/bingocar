@@ -467,12 +467,5 @@ function initMobileMenu() {
     
     menuBtn.addEventListener('click', () => {
         navMenu.classList.toggle('active');
-        // 添加点击其他区域关闭菜单的功能
-        document.addEventListener('click', function closeMenu(e) {
-            if (!menuBtn.contains(e.target) && !navMenu.contains(e.target)) {
-                navMenu.classList.remove('active');
-                document.removeEventListener('click', closeMenu);
-            }
-        });
     });
 }
