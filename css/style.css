@@ -415,11 +415,16 @@ header {
     }
     
     .nav-menu {
-        display: none;
+        display: flex; /* 修改：在移动端显示导航菜单 */
+        font-size: 14px; /* 添加：减小移动端字体大小 */
+    }
+    
+    .nav-menu li {
+        margin-left: 0; /* 修改：移除左边距 */
     }
     
     .mobile-menu-btn {
-        display: block;
+        display: none; /* 修改：隐藏移动端菜单按钮 */
     }
     
     .section-title {
@@ -655,34 +660,9 @@ footer {
     font-weight: bold;
 }
 
-/* 移动端导航适配 */
+/* 移动端适配 */
 @media (max-width: 768px) {
-    .header-container {
-        flex-direction: column;
-        align-items: center;
-        padding: 10px 0;
-    }
-    
-    .logo {
-        margin-bottom: 10px;
-    }
-    
-    .nav-menu {
-        margin: 0;
-        padding: 0;
-    }
-    
-    .nav-menu li a {
-        font-size: 14px;
-    }
-    
-    /* 隐藏移动端菜单按钮 */
-    .mobile-menu-btn {
-        display: none;
-    }
-    
-    .nav-menu {
-        display: flex;
-        margin: 0;
+    .logo span {
+        font-size: 16px;
     }
 }
