@@ -636,3 +636,50 @@ footer {
     margin-top: 40px;
     border-top: 1px solid var(--border-color);
 }
+
+/* 修改移动端导航样式，确保电话号码始终显示 */
+@media (max-width: 768px) {
+    .nav-menu {
+        display: flex !important; /* 强制显示导航菜单 */
+        position: static;
+        background: none;
+        box-shadow: none;
+        padding: 0;
+        flex-direction: row;
+        justify-content: flex-end;
+        font-size: 14px; /* 减小字体大小以适应移动端 */
+    }
+    
+    .nav-menu li {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .nav-menu a {
+        padding: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 150px; /* 限制最大宽度 */
+    }
+    
+    .mobile-menu-btn {
+        display: none !important; /* 确保移动端菜单按钮不显示 */
+    }
+    
+    .header-container {
+        padding: 10px 15px;
+    }
+}
+
+/* 更小屏幕的额外适配 */
+@media (max-width: 480px) {
+    .nav-menu a {
+        max-width: 120px; /* 进一步限制宽度 */
+        font-size: 12px; /* 更小的字体 */
+    }
+    
+    .logo {
+        font-size: 18px; /* 减小logo字体大小 */
+    }
+}

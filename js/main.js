@@ -483,12 +483,15 @@ function renderRecommendCars(cars) {
 
 // 初始化移动端菜单
 function initMobileMenu() {
-    const menuBtn = document.querySelector('.mobile-menu-btn');
-    const navMenu = document.querySelector('.nav-menu');
-    
-    if (!menuBtn || !navMenu) return;
-    
-    menuBtn.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-    });
+    // 由于我们已经移除了移动端菜单按钮，这个函数可以保留但不执行任何操作
+    // 或者可以完全移除这个函数的调用
+    return;
 }
+const menuBtn = document.querySelector('.mobile-menu-btn');
+const navMenu = document.querySelector('.nav-menu');
+
+if (!menuBtn || !navMenu) return;
+
+menuBtn.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+});
