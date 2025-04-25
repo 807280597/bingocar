@@ -196,12 +196,12 @@ function loadCarDetail() {
                 
                 renderCarDetail(car);
                 
-                // 随机推荐3辆车（不包括当前车辆）
+                // 随机推荐4辆车（不包括当前车辆）
                 const otherCars = data.cars.filter(c => c.id != carId);
                 // 随机打乱数组
                 const shuffledCars = shuffleArray(otherCars);
-                // 取前3辆车作为推荐
-                const randomRecommendCars = shuffledCars.slice(0, 3);
+                // 取前4辆车作为推荐
+                const randomRecommendCars = shuffledCars.slice(0, 4);
                 renderRecommendCars(randomRecommendCars);
             } else {
                 console.error('未找到对应ID的车辆:', carId);
@@ -236,8 +236,9 @@ function renderCarDetail(car) {
     const galleryThumbs = document.querySelector('.gallery-thumbs');
     
     if (galleryMain && galleryThumbs && car.images && car.images.length > 0) {
-        // 初始化主图
-        galleryMain.innerHTML = `<img src="${car.images[0]}" alt="${car.title}">`;
+        // 初始化主图（保留导航按钮）
+        const navButtons = galleryMain.innerHTML;
+        galleryMain.innerHTML = `<img src="${car.images[0]}" alt="${car.title}">` + navButtons;
         
         // 清空缩略图容器
         galleryThumbs.innerHTML = '';
@@ -250,7 +251,7 @@ function renderCarDetail(car) {
             
             thumb.addEventListener('click', () => {
                 // 更新主图
-                galleryMain.innerHTML = `<img src="${image}" alt="${car.title}">`;
+                updateMainImage(image, car.title);
                 
                 // 更新缩略图激活状态
                 document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
@@ -269,7 +270,7 @@ function renderCarDetail(car) {
             currentImageIndex = (currentImageIndex + 1) % car.images.length;
             
             // 更新主图
-            galleryMain.innerHTML = `<img src="${car.images[currentImageIndex]}" alt="${car.title}">`;
+            updateMainImage(car.images[currentImageIndex], car.title);
             
             // 更新缩略图激活状态
             document.querySelectorAll('.gallery-thumb').forEach((t, i) => {
@@ -281,23 +282,105 @@ function renderCarDetail(car) {
             });
         }, 3000); // 3秒切换一次
         
+        // 添加左右切换按钮事件
+        const prevButton = document.querySelector('.gallery-prev');
+        const nextButton = document.querySelector('.gallery-next');
+        
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => {
+                currentImageIndex = (currentImageIndex - 1 + car.images.length) % car.images.length;
+                
+                // 更新主图
+                updateMainImage(car.images[currentImageIndex], car.title);
+                
+                // 更新缩略图激活状态
+                document.querySelectorAll('.gallery-thumb').forEach((t, i) => {
+                    if (i === currentImageIndex) {
+                        t.classList.add('active');
+                    } else {
+                        t.classList.remove('active');
+                    }
+                });
+            });
+            
+            nextButton.addEventListener('click', () => {
+                currentImageIndex = (currentImageIndex + 1) % car.images.length;
+                
+                // 更新主图
+                updateMainImage(car.images[currentImageIndex], car.title);
+                
+                // 更新缩略图激活状态
+                document.querySelectorAll('.gallery-thumb').forEach((t, i) => {
+                    if (i === currentImageIndex) {
+                        t.classList.add('active');
+                    } else {
+                        t.classList.remove('active');
+                    }
+                });
+            });
+        }
+        
         // 当用户离开页面时清除定时器
         window.addEventListener('beforeunload', () => {
             clearInterval(autoSlideInterval);
         });
     }
     
+    // 更新主图的辅助函数
+    function updateMainImage(imageSrc, altText) {
+        const mainImage = galleryMain.querySelector('img');
+        if (mainImage) {
+            mainImage.src = imageSrc;
+            mainImage.alt = altText;
+        } else {
+            const navButtons = galleryMain.innerHTML;
+            galleryMain.innerHTML = `<img src="${imageSrc}" alt="${altText}">` + navButtons;
+        }
+    }
+    
     // 渲染基本信息
     document.querySelector('.detail-title').textContent = car.title || '';
     
-    // 移除价格相关代码
+    // 渲染元数据 - 只显示有值的字段
+    const metaContainer = document.querySelector('.detail-meta');
+    metaContainer.innerHTML = '';
     
-    // 渲染元数据
-    const metaItems = document.querySelectorAll('.meta-item');
-    if (metaItems.length >= 2) {
-        metaItems[0].querySelector('.meta-value').textContent = car.year || '';
-        metaItems[1].querySelector('.meta-value').textContent = car.mileage || '';
-        // 移除地点相关代码
+    // 年份
+    if (car.year) {
+        const yearItem = document.createElement('div');
+        yearItem.className = 'meta-item';
+        yearItem.innerHTML = `
+            <span class="meta-icon"><i class="fas fa-calendar-alt"></i></span>
+            <span class="meta-value">${car.year}</span>
+        `;
+        metaContainer.appendChild(yearItem);
+    }
+    
+    // 里程
+    if (car.mileage) {
+        const mileageItem = document.createElement('div');
+        mileageItem.className = 'meta-item';
+        mileageItem.innerHTML = `
+            <span class="meta-icon"><i class="fas fa-road"></i></span>
+            <span class="meta-value">${car.mileage}</span>
+        `;
+        metaContainer.appendChild(mileageItem);
+    }
+    
+    // 排量 - 从parameters中获取
+    let displacement = '';
+    if (car.parameters && car.parameters['基本信息'] && car.parameters['基本信息']['排量']) {
+        displacement = car.parameters['基本信息']['排量'];
+    }
+    
+    if (displacement) {
+        const displacementItem = document.createElement('div');
+        displacementItem.className = 'meta-item';
+        displacementItem.innerHTML = `
+            <span class="meta-icon"><i class="fas fa-tachometer-alt"></i></span>
+            <span class="meta-value">${displacement}</span>
+        `;
+        metaContainer.appendChild(displacementItem);
     }
     
     // 渲染标签
