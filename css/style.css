@@ -64,52 +64,14 @@ header {
     padding: 15px 0;
 }
 
-/* Logo样式 */
 .logo {
-    display: flex;
-    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--text-primary);
 }
 
-.logo a {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: var(--text-dark);
-    gap: 10px;
-}
-
-.logo-img {
+.logo img {
     height: 40px;
-    width: auto;
-}
-
-/* 页脚Logo样式 */
-.footer-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.footer-logo .logo-img {
-    height: 30px;
-    width: auto;
-}
-
-.footer-logo h3 {
-    margin: 0;
-    color: var(--text-light);
-}
-
-/* 移动端适配 */
-@media (max-width: 768px) {
-    .logo-img {
-        height: 32px;
-    }
-    
-    .footer-logo .logo-img {
-        height: 24px;
-    }
 }
 
 .nav-menu {
@@ -673,4 +635,29 @@ footer {
     padding: 40px 0;
     margin-top: 40px;
     border-top: 1px solid var(--border-color);
+}
+
+
+.logo a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo img {
+    display: block;
+}
+
+.logo span {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .logo span {
+        font-size: 16px;
+    }
 }
