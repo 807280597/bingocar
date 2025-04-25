@@ -116,62 +116,47 @@ function renderCars(cars, container) {
 }
 
 // 加载车辆数据
-// 在现有的加载车辆数据函数中添加搜索过滤功能
 function loadCars() {
+    const carListElements = document.querySelectorAll('.car-list');
+    if (carListElements.length === 0) return;
+    
+    // 从 cars.json 加载数据，使用绝对路径
     fetch('/data/cars.json')
-        .then(response => response.json())
-        .then(data => {
-            let cars = data.cars;
-            
-            // 应用搜索过滤
-            if (window.location.search) {
-                const params = new URLSearchParams(window.location.search);
-                
-                // 品牌过滤
-                if (params.has('brand')) {
-                    const brand = params.get('brand');
-                    cars = cars.filter(car => car.category === brand);
-                }
-                
-                // 车龄过滤
-                if (params.has('age')) {
-                    const age = parseInt(params.get('age'));
-                    const currentYear = new Date().getFullYear();
-                    
-                    cars = cars.filter(car => {
-                        // 从car.year中提取年份
-                        const yearMatch = car.year && car.year.match(/\d{4}/);
-                        if (yearMatch) {
-                            const carYear = parseInt(yearMatch[0]);
-                            const carAge = currentYear - carYear;
-                            return carAge <= age && carAge > (age - 2); // 车龄在指定范围内
-                        }
-                        return false;
-                    });
-                }
-                
-                // 关键词搜索
-                if (params.has('keyword')) {
-                    const keyword = params.get('keyword').toLowerCase();
-                    cars = cars.filter(car => {
-                        return (
-                            (car.title && car.title.toLowerCase().includes(keyword)) ||
-                            (car.category && car.category.toLowerCase().includes(keyword)) ||
-                            (car.description && car.description.toLowerCase().includes(keyword))
-                        );
-                    });
-                }
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('网络响应不正常');
             }
-            
-            // 渲染车辆列表
-            renderCarList(cars);
-            
-            // 如果是详情页，加载详情
-            if (window.location.pathname.includes('detail.html')) {
-                loadCarDetail();
-            }
+            return response.json();
         })
-        .catch(error => console.error('加载车辆数据失败:', error));
+        .then(data => {
+            console.log('成功加载车辆数据:', data); // 添加日志
+            
+            if (!data.cars || !Array.isArray(data.cars)) {
+                console.error('车辆数据格式不正确，缺少cars数组');
+                return;
+            }
+            
+            carListElements.forEach((element, index) => {
+                if (index === 0 && !element.classList.contains('recommend-list')) {
+                    // 热门车辆，检查tags字段是否存在
+                    const hotCars = data.cars.filter(car => car.tags && car.tags.includes('热门'));
+                    console.log('热门车辆:', hotCars); // 添加日志
+                    renderCars(hotCars, element);
+                } else if (index === 1 && !element.classList.contains('recommend-list')) {
+                    console.log('所有车辆:', data.cars); // 添加日志
+                    renderCars(data.cars, element);
+                } else if (element.classList.contains('recommend-list')) {
+                    renderCars(data.recommendCars || [], element);
+                }
+            });
+        })
+        .catch(error => {
+            console.error('加载车辆数据失败:', error);
+            // 在页面上显示错误信息
+            carListElements.forEach(element => {
+                element.innerHTML = `<div class="error-message">加载车辆数据失败: ${error.message}</div>`;
+            });
+        });
 }
 
 // 加载车辆详情
@@ -507,6 +492,3 @@ function initMobileMenu() {
         navMenu.classList.toggle('active');
     });
 }
-
-// 确保页面加载时执行
-document.addEventListener('DOMContentLoaded', loadCars);
