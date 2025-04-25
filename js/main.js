@@ -227,7 +227,6 @@ function shuffleArray(array) {
 }
 
 // 渲染车辆详情
-// 渲染图片画廊
 function renderCarDetail(car) {
     // 设置页面标题
     document.title = car.title + ' - 阿敬淘车';
@@ -318,45 +317,6 @@ function renderCarDetail(car) {
                         t.classList.remove('active');
                     }
                 });
-            });
-        }
-        
-        // 添加触摸滑动功能
-        let touchStartX = 0;
-        let touchEndX = 0;
-        
-        galleryMain.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        }, false);
-        
-        galleryMain.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        }, false);
-        
-        function handleSwipe() {
-            // 检测滑动方向
-            if (touchEndX < touchStartX - 50) {
-                // 向左滑动，显示下一张
-                currentImageIndex = (currentImageIndex + 1) % car.images.length;
-            } else if (touchEndX > touchStartX + 50) {
-                // 向右滑动，显示上一张
-                currentImageIndex = (currentImageIndex - 1 + car.images.length) % car.images.length;
-            } else {
-                // 滑动距离不够，不切换
-                return;
-            }
-            
-            // 更新主图
-            updateMainImage(car.images[currentImageIndex], car.title);
-            
-            // 更新缩略图激活状态
-            document.querySelectorAll('.gallery-thumb').forEach((t, i) => {
-                if (i === currentImageIndex) {
-                    t.classList.add('active');
-                } else {
-                    t.classList.remove('active');
-                }
             });
         }
         

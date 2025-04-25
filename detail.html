@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>车辆详情 - 阿敬淘车</title>
     <meta name="description" content="提供优质二手车买卖、评估、金融服务的专业平台">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -38,26 +38,6 @@
         }
         .gallery-main {
             position: relative;
-        }
-        
-        /* 添加触摸滑动提示样式 */
-        @media (max-width: 768px) {
-            .gallery-main::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>') no-repeat center center;
-                pointer-events: none;
-                opacity: 0.7;
-                animation: fadeOut 2s forwards 3s;
-            }
-            
-            @keyframes fadeOut {
-                to { opacity: 0; }
-            }
         }
     </style>
 </head>
