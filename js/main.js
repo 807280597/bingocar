@@ -226,8 +226,6 @@ function shuffleArray(array) {
     return newArray;
 }
 
-// 在main.js文件中添加以下代码，支持触摸滑动
-
 // 渲染车辆详情
 function renderCarDetail(car) {
     // 设置页面标题
@@ -240,7 +238,7 @@ function renderCarDetail(car) {
     if (galleryMain && galleryThumbs && car.images && car.images.length > 0) {
         // 初始化主图（保留导航按钮）
         const navButtons = galleryMain.innerHTML;
-        galleryMain.innerHTML = `<img src="${car.images[0]}" alt="${car.title}" id="mainImage">` + navButtons;
+        galleryMain.innerHTML = `<img src="${car.images[0]}" alt="${car.title}">` + navButtons;
         
         // 清空缩略图容器
         galleryThumbs.innerHTML = '';
@@ -249,7 +247,7 @@ function renderCarDetail(car) {
         car.images.forEach((image, index) => {
             const thumb = document.createElement('div');
             thumb.className = `gallery-thumb ${index === 0 ? 'active' : ''}`;
-            thumb.innerHTML = `<img src="${image}" alt="${car.title} - 图片${index + 1}" data-index="${index}">`;
+            thumb.innerHTML = `<img src="${image}" alt="${car.title} - 图片${index + 1}">`;
             
             thumb.addEventListener('click', () => {
                 // 更新主图
@@ -282,12 +280,6 @@ function renderCarDetail(car) {
                     t.classList.remove('active');
                 }
             });
-            
-            // 滚动缩略图到可见区域
-            const activeThumb = document.querySelector('.gallery-thumb.active');
-            if (activeThumb) {
-                galleryThumbs.scrollLeft = activeThumb.offsetLeft - galleryThumbs.offsetWidth / 2 + activeThumb.offsetWidth / 2;
-            }
         }, 3000); // 3秒切换一次
         
         // 添加左右切换按钮事件
@@ -309,12 +301,6 @@ function renderCarDetail(car) {
                         t.classList.remove('active');
                     }
                 });
-                
-                // 滚动缩略图到可见区域
-                const activeThumb = document.querySelector('.gallery-thumb.active');
-                if (activeThumb) {
-                    galleryThumbs.scrollLeft = activeThumb.offsetLeft - galleryThumbs.offsetWidth / 2 + activeThumb.offsetWidth / 2;
-                }
             });
             
             nextButton.addEventListener('click', () => {
@@ -331,12 +317,6 @@ function renderCarDetail(car) {
                         t.classList.remove('active');
                     }
                 });
-                
-                // 滚动缩略图到可见区域
-                const activeThumb = document.querySelector('.gallery-thumb.active');
-                if (activeThumb) {
-                    galleryThumbs.scrollLeft = activeThumb.offsetLeft - galleryThumbs.offsetWidth / 2 + activeThumb.offsetWidth / 2;
-                }
             });
         }
         
@@ -354,7 +334,7 @@ function renderCarDetail(car) {
             mainImage.alt = altText;
         } else {
             const navButtons = galleryMain.innerHTML;
-            galleryMain.innerHTML = `<img src="${imageSrc}" alt="${altText}" id="mainImage">` + navButtons;
+            galleryMain.innerHTML = `<img src="${imageSrc}" alt="${altText}">` + navButtons;
         }
     }
     
