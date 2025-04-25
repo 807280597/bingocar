@@ -170,7 +170,7 @@ function loadCarDetail() {
         return;
     }
     
-    // 从 cars.json 加载数据 - 修改为相对路径
+    // 从 cars.json 加载数据
     fetch('data/cars.json')
         .then(response => {
             if (!response.ok) {
@@ -188,6 +188,12 @@ function loadCarDetail() {
             const car = data.cars.find(c => c.id == carId);
             
             if (car) {
+                // 确保car对象有所有必要的属性，防止渲染时出错
+                car.parameters = car.parameters || {}; // 如果parameters不存在，设置为空对象
+                car.tags = car.tags || [];
+                car.highlights = car.highlights || [];
+                car.images = car.images || [];
+                
                 renderCarDetail(car);
                 // 检查recommendCars是否存在
                 if (data.recommendCars && Array.isArray(data.recommendCars)) {
