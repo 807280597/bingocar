@@ -162,6 +162,17 @@ header {
     transition: all 0.3s;
 }
 
+/* 分类激活状态 */
+.category-item.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.category-item.active .category-icon,
+.category-item.active .category-name {
+    color: white;
+}
+
 .category-item:hover {
     background-color: var(--primary-color);
     color: white;
