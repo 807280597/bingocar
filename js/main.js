@@ -172,7 +172,6 @@ function initCategoryNav(cars) {
     const allCategoryItem = document.createElement('div');
     allCategoryItem.className = 'category-item active';
     allCategoryItem.innerHTML = `
-        <div class="category-icon"><i class="fas fa-car"></i></div>
         <div class="category-name">全部</div>
     `;
     allCategoryItem.addEventListener('click', () => {
@@ -196,16 +195,8 @@ function initCategoryNav(cars) {
         const categoryItem = document.createElement('div');
         categoryItem.className = 'category-item';
         
-        // 根据分类名称选择合适的图标
-        let iconClass = 'fa-car';
-        if (category.includes('丰田')) iconClass = 'fa-car-side';
-        else if (category.includes('本田')) iconClass = 'fa-car-alt';
-        else if (category.includes('日产')) iconClass = 'fa-truck-pickup';
-        else if (category.includes('现代')) iconClass = 'fa-shuttle-van';
-        else if (category.includes('传祺')) iconClass = 'fa-truck';
-        
+        // 移除图标，只保留文字
         categoryItem.innerHTML = `
-            <div class="category-icon"><i class="fas ${iconClass}"></i></div>
             <div class="category-name">${category}</div>
         `;
         

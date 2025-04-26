@@ -146,20 +146,51 @@ header {
 .categories {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    margin: 30px 0;
-    gap: 15px;
+    justify-content: center;
+    margin: 10px 0 20px;
+    gap: 10px;
+    background-color: var(--background-light);
+    padding: 10px;
+    border-radius: 8px;
 }
 
 .category-item {
-    flex: 1;
-    min-width: 100px;
+    padding: 8px 15px;
     text-align: center;
-    padding: 15px;
-    background-color: var(--background-light);
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    background-color: #f5f5f7;
+    border-radius: 20px;
     transition: all 0.3s;
+    cursor: pointer;
+}
+
+.category-item:hover {
+    background-color: #e0e0e5;
+}
+
+.category-item.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.category-name {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .categories {
+        padding: 8px;
+        gap: 8px;
+    }
+    
+    .category-item {
+        padding: 6px 12px;
+    }
+    
+    .category-name {
+        font-size: 12px;
+    }
 }
 
 .category-item.active {
