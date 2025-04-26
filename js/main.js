@@ -136,14 +136,10 @@ function loadCars() {
                 return;
             }
             
-            carListElements.forEach((element, index) => {
-                if (index === 0 && !element.classList.contains('recommend-list')) {
-                    // 热门车辆，检查tags字段是否存在
-                    const hotCars = data.cars.filter(car => car.tags && car.tags.includes('热门'));
-                    console.log('热门车辆:', hotCars); // 添加日志
-                    renderCars(hotCars, element);
-                } else if (index === 1 && !element.classList.contains('recommend-list')) {
-                    console.log('所有车辆:', data.cars); // 添加日志
+            carListElements.forEach((element) => {
+                // 修改：不再区分热门车辆和所有车辆，直接展示全部车辆
+                if (!element.classList.contains('recommend-list')) {
+                    console.log('展示所有车辆:', data.cars);
                     renderCars(data.cars, element);
                 } else if (element.classList.contains('recommend-list')) {
                     renderCars(data.recommendCars || [], element);
@@ -496,36 +492,3 @@ function initMobileMenu() {
     });
     */
 }
-
-// 渲染品牌分类的CSS样式
-document.addEventListener('DOMContentLoaded', function() {
-    // 添加样式
-    const style = document.createElement('style');
-    style.textContent = `
-        .categories {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-        
-        .category-item {
-            padding: 8px 15px;
-            border-radius: 5px;
-            background-color: #f0f0f0;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .category-item.active {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .category-item:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-    `;
-    document.head.appendChild(style);
-});
