@@ -142,24 +142,67 @@ header {
     color: var(--text-secondary);
 }
 
-/* 分类导航 */
+/* 分类导航 - 修改为品牌分类样式 */
 .categories {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     margin: 30px 0;
-    gap: 15px;
+    gap: 10px;
 }
 
 .category-item {
-    flex: 1;
-    min-width: 100px;
+    flex: 0 0 auto;
+    min-width: 80px;
     text-align: center;
-    padding: 15px;
+    padding: 8px 15px;
     background-color: var(--background-light);
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     transition: all 0.3s;
+    cursor: pointer;
+}
+
+.category-item:hover, .category-item.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.category-item:hover .category-name, .category-item.active .category-name {
+    color: white;
+}
+
+.category-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    transition: color 0.3s;
+}
+
+/* 移除不需要的图标样式 */
+.category-icon {
+    display: none;
+}
+
+/* 全部车辆模块样式 */
+.all-cars {
+    margin: 40px 0;
+}
+
+/* 移动端适配 */
+@media (max-width: 576px) {
+    .categories {
+        gap: 8px;
+    }
+    
+    .category-item {
+        min-width: 70px;
+        padding: 6px 12px;
+    }
+    
+    .category-name {
+        font-size: 12px;
+    }
 }
 
 .category-item:hover {
