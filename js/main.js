@@ -94,13 +94,33 @@ function renderCars(cars, container) {
         }
         html += `</div>`;
         
-        // 元数据信息，检查是否存在
-        if (car.year || car.mileage) {
-            html += `<div class="car-meta">`;
-            if (car.year) html += `<span>${car.year}</span>`;
-            if (car.mileage) html += `<span>${car.mileage}</span>`;
-            html += `</div>`;
+        // 元数据信息，添加年份和里程的单位，确保排量显示
+        html += `<div class="car-meta">`;
+        let metaItems = [];
+        
+        // 年份，添加"年"单位
+        if (car.year) metaItems.push(`<span>${car.year}年</span>`);
+        
+        // 里程，确保带有"万公里"单位
+        if (car.mileage) {
+            // 检查是否已经包含"万公里"单位
+            let mileageText = car.mileage;
+            if (!mileageText.includes('万公里')) {
+                mileageText += '万公里';
+            }
+            metaItems.push(`<span>${mileageText}</span>`);
         }
+        
+        // 排量，确保显示
+        if (car.displacement) {
+            metaItems.push(`<span>${car.displacement}</span>`);
+        } else if (car.parameters && car.parameters['基本信息'] && car.parameters['基本信息']['排量']) {
+            // 如果car.displacement不存在，尝试从parameters中获取
+            metaItems.push(`<span>${car.parameters['基本信息']['排量']}</span>`);
+        }
+        
+        html += metaItems.join('');
+        html += `</div>`;
         
         // 标签信息，检查是否存在
         if (car.tags && car.tags.length > 0) {
@@ -181,6 +201,12 @@ function initCategoryNav(cars) {
         });
         allCategoryItem.classList.add('active');
         
+        // 更新页面标题
+        const sectionTitle = document.querySelector('.section-title');
+        if (sectionTitle) {
+            sectionTitle.textContent = '全部车辆';
+        }
+        
         // 显示所有车辆
         const carList = document.querySelector('.car-list:not(.recommend-list)');
         if (carList) {
@@ -195,7 +221,6 @@ function initCategoryNav(cars) {
         const categoryItem = document.createElement('div');
         categoryItem.className = 'category-item';
         
-        // 移除图标，只保留文字
         categoryItem.innerHTML = `
             <div class="category-name">${category}</div>
         `;
@@ -206,6 +231,12 @@ function initCategoryNav(cars) {
                 item.classList.remove('active');
             });
             categoryItem.classList.add('active');
+            
+            // 更新页面标题
+            const sectionTitle = document.querySelector('.section-title');
+            if (sectionTitle) {
+                sectionTitle.textContent = `${category}`;
+            }
             
             // 筛选该分类的车辆
             const filteredCars = cars.filter(car => car.category === category);
@@ -437,7 +468,7 @@ function renderCarDetail(car) {
         yearItem.className = 'meta-item';
         yearItem.innerHTML = `
             <span class="meta-icon"><i class="fas fa-calendar-alt"></i></span>
-            <span class="meta-value">${car.year}</span>
+            <span class="meta-value">${car.year}年</span>
         `;
         metaContainer.appendChild(yearItem);
     }
@@ -453,13 +484,19 @@ function renderCarDetail(car) {
         metaContainer.appendChild(mileageItem);
     }
     
-    // 排量 - 从parameters中获取
-    let displacement = '';
-    if (car.parameters && car.parameters['基本信息'] && car.parameters['基本信息']['排量']) {
-        displacement = car.parameters['基本信息']['排量'];
+    // 排量 - 直接使用car.displacement，如果存在的话
+    if (car.displacement) {
+        const displacementItem = document.createElement('div');
+        displacementItem.className = 'meta-item';
+        displacementItem.innerHTML = `
+            <span class="meta-icon"><i class="fas fa-tachometer-alt"></i></span>
+            <span class="meta-value">${car.displacement}</span>
+        `;
+        metaContainer.appendChild(displacementItem);
     }
-    
-    if (displacement) {
+    // 如果car.displacement不存在，尝试从parameters中获取
+    else if (car.parameters && car.parameters['基本信息'] && car.parameters['基本信息']['排量']) {
+        const displacement = car.parameters['基本信息']['排量'];
         const displacementItem = document.createElement('div');
         displacementItem.className = 'meta-item';
         displacementItem.innerHTML = `
@@ -559,3 +596,110 @@ function initMobileMenu() {
     });
     */
 }
+
+// 初始化搜索功能
+function initSearch() {
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    
+    if (!searchForm || !searchInput) return;
+    
+    searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        
+        if (searchTerm === '') return;
+        
+        // 如果在详情页，跳转到首页并带上搜索参数
+        if (window.location.pathname.includes('detail.html')) {
+            window.location.href = `index.html?search=${encodeURIComponent(searchTerm)}`;
+            return;
+        }
+        
+        // 在首页直接执行搜索
+        performSearch(searchTerm);
+    });
+    
+    // 检查URL中是否有搜索参数
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchParam = urlParams.get('search');
+    
+    if (searchParam) {
+        searchInput.value = searchParam;
+        performSearch(searchParam.toLowerCase());
+    }
+}
+
+// 执行搜索
+function performSearch(searchTerm) {
+    // 从 cars.json 加载数据
+    fetch('/data/cars.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('网络响应不正常');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data.cars || !Array.isArray(data.cars)) {
+                console.error('车辆数据格式不正确，缺少cars数组');
+                return;
+            }
+            
+            // 筛选匹配的车辆
+            const filteredCars = data.cars.filter(car => {
+                // 匹配标题
+                if (car.title && car.title.toLowerCase().includes(searchTerm)) {
+                    return true;
+                }
+                
+                // 匹配排量
+                if (car.displacement && car.displacement.toLowerCase().includes(searchTerm)) {
+                    return true;
+                }
+                
+                // 匹配里程
+                if (car.mileage && car.mileage.toLowerCase().includes(searchTerm)) {
+                    return true;
+                }
+                
+                return false;
+            });
+            
+            // 更新页面标题
+            const sectionTitle = document.querySelector('.section-title');
+            if (sectionTitle) {
+                sectionTitle.textContent = `搜索结果: ${searchTerm}`;
+            }
+            
+            // 更新车辆列表
+            const carList = document.querySelector('.car-list:not(.recommend-list)');
+            if (carList) {
+                carList.innerHTML = '';
+                
+                if (filteredCars.length > 0) {
+                    renderCars(filteredCars, carList);
+                } else {
+                    carList.innerHTML = '<div class="no-results">没有找到匹配的车辆，请尝试其他关键词</div>';
+                }
+            }
+        })
+        .catch(error => {
+            console.error('加载车辆数据失败:', error);
+        });
+}
+
+// 在页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化搜索功能
+    initSearch();
+    
+    // 其他初始化函数...
+    loadCars();
+    initMobileMenu();
+    
+    // 如果是详情页，加载详情
+    if (window.location.pathname.includes('detail.html')) {
+        loadCarDetail();
+    }
+});
