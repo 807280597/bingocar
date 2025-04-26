@@ -1,104 +1,54 @@
 // 主JavaScript文件
-// 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
-    // 获取车辆数据
-    fetch('/data/cars.json')
-        .then(response => response.json())
-        .then(data => {
-            // 初始化页面
-            if (document.querySelector('#allCars')) {
-                // 首页 - 渲染品牌分类和全部车辆
-                renderBrandCategories(data.cars);
-                renderAllCars(data.cars);
-                initCategoryFilter(data.cars);
-            } else if (document.querySelector('.detail-gallery')) {
-                // 详情页 - 渲染车辆详情和推荐车型
-                const urlParams = new URLSearchParams(window.location.search);
-                const carId = parseInt(urlParams.get('id'));
-                
-                if (carId) {
-                    const car = data.cars.find(car => car.id === carId);
-                    if (car) {
-                        renderCarDetail(car);
-                        
-                        // 获取同品牌的其他车辆作为推荐
-                        const recommendCars = data.cars
-                            .filter(c => c.category === car.category && c.id !== car.id)
-                            .slice(0, 4);
-                        renderRecommendCars(recommendCars);
-                    } else {
-                        alert('未找到该车辆信息');
-                    }
-                }
-            }
-            
-            // 初始化移动端菜单
-            initMobileMenu();
-        })
-        .catch(error => {
-            console.error('获取数据失败:', error);
-        });
+    // 初始化轮播图
+    initCarousel();
+    
+    // 加载车辆数据
+    loadCars();
+    
+    // 如果是详情页，加载详情
+    if (document.querySelector('.car-detail')) {
+        loadCarDetail();
+    }
+    
+    // 初始化移动端菜单
+    initMobileMenu();
 });
 
-// 渲染品牌分类
-function renderBrandCategories(cars) {
-    const categoriesContainer = document.getElementById('brandCategories');
-    if (!categoriesContainer) return;
+// 初始化轮播图
+function initCarousel() {
+    const carousel = document.querySelector('.carousel');
+    if (!carousel) return;
     
-    // 提取所有不重复的品牌
-    const categories = [...new Set(cars.map(car => car.category))];
+    const items = carousel.querySelectorAll('.carousel-item');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    let currentIndex = 0;
     
-    // 保留"全部"分类，已在HTML中静态添加
+    // 设置第一个为激活状态
+    items[0].classList.add('active');
+    dots[0].classList.add('active');
     
-    // 添加其他品牌分类
-    categories.forEach(category => {
-        const categoryItem = document.createElement('div');
-        categoryItem.className = 'category-item';
-        categoryItem.setAttribute('data-category', category);
+    // 自动轮播
+    setInterval(() => {
+        items[currentIndex].classList.remove('active');
+        dots[currentIndex].classList.remove('active');
         
-        categoryItem.innerHTML = `
-            <div class="category-icon"><i class="fas fa-car"></i></div>
-            <div class="category-name">${category}</div>
-        `;
+        currentIndex = (currentIndex + 1) % items.length;
         
-        categoriesContainer.appendChild(categoryItem);
-    });
-}
-
-// 渲染全部车辆
-function renderAllCars(cars) {
-    const container = document.getElementById('allCars');
-    if (!container) return;
+        items[currentIndex].classList.add('active');
+        dots[currentIndex].classList.add('active');
+    }, 5000);
     
-    renderCars(cars, container);
-}
-
-// 初始化分类筛选功能
-function initCategoryFilter(cars) {
-    const categoryItems = document.querySelectorAll('.category-item');
-    const carsContainer = document.getElementById('allCars');
-    
-    if (!categoryItems.length || !carsContainer) return;
-    
-    categoryItems.forEach(item => {
-        item.addEventListener('click', () => {
-            // 更新激活状态
-            categoryItems.forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
+    // 点击指示器切换
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            items[currentIndex].classList.remove('active');
+            dots[currentIndex].classList.remove('active');
             
-            const category = item.getAttribute('data-category');
+            currentIndex = index;
             
-            // 筛选车辆
-            let filteredCars;
-            if (category === 'all') {
-                filteredCars = cars;
-            } else {
-                filteredCars = cars.filter(car => car.category === category);
-            }
-            
-            // 重新渲染车辆列表
-            carsContainer.innerHTML = '';
-            renderCars(filteredCars, carsContainer);
+            items[currentIndex].classList.add('active');
+            dots[currentIndex].classList.add('active');
         });
     });
 }
