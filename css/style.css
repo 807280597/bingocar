@@ -521,7 +521,8 @@ header {
         order: 3; /* 在移动端将搜索框放在第三位 */
         max-width: 100%;
         margin: 10px 0 0;
-        width: 100%;
+        width: 100%; /* 确保搜索框占满整行 */
+        flex-basis: 100%; /* 添加这一行，强制搜索框占据整行 */
     }
     
     .nav-menu {
