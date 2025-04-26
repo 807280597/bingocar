@@ -492,3 +492,142 @@ function initMobileMenu() {
         navMenu.classList.toggle('active');
     });
 }
+
+// 在文件适当位置添加以下代码
+
+// 初始化搜索功能
+function initSearch() {
+    // 加载品牌选项
+    fetch('data/cars.json')
+        .then(response => response.json())
+        .then(data => {
+            // 获取所有不重复的品牌
+            const brands = [...new Set(data.map(car => car.category))];
+            const brandFilter = document.getElementById('brandFilter');
+            
+            // 添加品牌选项
+            brands.forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                brandFilter.appendChild(option);
+            });
+        })
+        .catch(error => console.error('加载品牌数据失败:', error));
+    
+    // 添加搜索按钮事件
+    const searchBtn = document.getElementById('searchBtn');
+    if (searchBtn) {
+        searchBtn.addEventListener('click', performSearch);
+    }
+    
+    // 添加回车键搜索
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+    }
+}
+
+// 执行搜索
+function performSearch() {
+    const brand = document.getElementById('brandFilter').value;
+    const age = document.getElementById('ageFilter').value;
+    const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
+    
+    // 如果在详情页，跳转到首页并带上搜索参数
+    if (window.location.pathname.includes('detail.html')) {
+        let searchParams = new URLSearchParams();
+        if (brand) searchParams.append('brand', brand);
+        if (age) searchParams.append('age', age);
+        if (keyword) searchParams.append('keyword', keyword);
+        
+        window.location.href = `index.html?${searchParams.toString()}`;
+        return;
+    }
+    
+    // 在首页直接执行搜索
+    fetch('data/cars.json')
+        .then(response => response.json())
+        .then(data => {
+            // 过滤车辆
+            let filteredCars = data;
+            
+            // 按品牌过滤
+            if (brand) {
+                filteredCars = filteredCars.filter(car => car.category === brand);
+            }
+            
+            // 按车龄过滤
+            if (age) {
+                const currentYear = new Date().getFullYear();
+                const ageValue = parseInt(age);
+                filteredCars = filteredCars.filter(car => {
+                    if (!car.year) return false;
+                    const carYear = parseInt(car.year.replace(/[^0-9]/g, ''));
+                    return (currentYear - carYear) <= ageValue;
+                });
+            }
+            
+            // 按关键词过滤
+            if (keyword) {
+                filteredCars = filteredCars.filter(car => 
+                    (car.title && car.title.toLowerCase().includes(keyword)) || 
+                    (car.description && car.description.toLowerCase().includes(keyword))
+                );
+            }
+            
+            // 更新车辆列表
+            updateCarList(filteredCars);
+        })
+        .catch(error => console.error('搜索失败:', error));
+}
+
+// 更新车辆列表
+function updateCarList(cars) {
+    const carListElement = document.querySelector('.car-list:not(.recommend-list)');
+    if (!carListElement) return;
+    
+    // 清空现有列表
+    carListElement.innerHTML = '';
+    
+    if (cars.length === 0) {
+        carListElement.innerHTML = '<div class="no-results">没有找到符合条件的车辆</div>';
+        return;
+    }
+    
+    // 添加车辆卡片
+    cars.forEach(car => {
+        const carCard = createCarCard(car);
+        carListElement.appendChild(carCard);
+    });
+}
+
+// 检查URL参数并执行搜索
+function checkSearchParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const brand = urlParams.get('brand');
+    const age = urlParams.get('age');
+    const keyword = urlParams.get('keyword');
+    
+    if (brand || age || keyword) {
+        // 设置表单值
+        if (brand) document.getElementById('brandFilter').value = brand;
+        if (age) document.getElementById('ageFilter').value = age;
+        if (keyword) document.getElementById('searchInput').value = keyword;
+        
+        // 执行搜索
+        performSearch();
+    }
+}
+
+// 在页面加载完成后初始化搜索功能
+document.addEventListener('DOMContentLoaded', function() {
+    initSearch();
+    checkSearchParams();
+    
+    // 其他现有的初始化代码...
+});

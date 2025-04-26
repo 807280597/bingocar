@@ -305,13 +305,102 @@ header {
     color: var(--accent-color);
 }
 
-/* 详情页样式 */
-.car-detail {
+/* 搜索栏样式 */
+.search-bar {
     background-color: var(--background-light);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 15px;
+    border-radius: 10px;
     margin: 20px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.search-filter {
+    flex: 1;
+    min-width: 120px;
+    position: relative;
+}
+
+.search-filter select {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: white;
+    font-size: 14px;
+    color: var(--text-primary);
+    appearance: none;
+    cursor: pointer;
+}
+
+.search-filter::after {
+    content: '\f107';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--text-secondary);
+}
+
+.search-input {
+    flex: 2;
+    min-width: 200px;
+    position: relative;
+}
+
+.search-input input {
+    width: 100%;
+    padding: 10px 15px;
+    padding-right: 40px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.search-input::after {
+    content: '\f002';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+.search-btn {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-btn:hover {
+    background-color: #005bbf;
+}
+
+/* 移动端搜索栏适配 */
+@media (max-width: 768px) {
+    .search-bar {
+        flex-direction: column;
+        padding: 10px;
+    }
+    
+    .search-filter, .search-input {
+        width: 100%;
+    }
 }
 
 .detail-gallery {
