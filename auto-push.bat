@@ -1,4 +1,5 @@
 @echo off
+chcp 65001 >nul
 echo ===== 自动Git推送脚本 =====
 echo 开始推送代码到GitHub...
 
