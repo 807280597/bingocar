@@ -129,17 +129,19 @@ function loadCars() {
             return response.json();
         })
         .then(data => {
-            console.log('成功加载车辆数据:', data); // 添加日志
+            console.log('成功加载车辆数据:', data);
             
             if (!data.cars || !Array.isArray(data.cars)) {
                 console.error('车辆数据格式不正确，缺少cars数组');
                 return;
             }
             
+            // 初始化分类导航
+            initCategoryNav(data.cars);
+            
+            // 默认显示所有车辆
             carListElements.forEach((element) => {
-                // 修改：不再区分热门车辆和所有车辆，直接展示全部车辆
                 if (!element.classList.contains('recommend-list')) {
-                    console.log('展示所有车辆:', data.cars);
                     renderCars(data.cars, element);
                 } else if (element.classList.contains('recommend-list')) {
                     renderCars(data.recommendCars || [], element);
@@ -153,6 +155,80 @@ function loadCars() {
                 element.innerHTML = `<div class="error-message">加载车辆数据失败: ${error.message}</div>`;
             });
         });
+}
+
+// 初始化分类导航
+function initCategoryNav(cars) {
+    const categoriesContainer = document.querySelector('.categories');
+    if (!categoriesContainer) return;
+    
+    // 提取所有不重复的分类
+    const categories = [...new Set(cars.map(car => car.category))];
+    
+    // 清空容器
+    categoriesContainer.innerHTML = '';
+    
+    // 添加"全部"分类
+    const allCategoryItem = document.createElement('div');
+    allCategoryItem.className = 'category-item active';
+    allCategoryItem.innerHTML = `
+        <div class="category-icon"><i class="fas fa-car"></i></div>
+        <div class="category-name">全部</div>
+    `;
+    allCategoryItem.addEventListener('click', () => {
+        // 更新激活状态
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        allCategoryItem.classList.add('active');
+        
+        // 显示所有车辆
+        const carList = document.querySelector('.car-list:not(.recommend-list)');
+        if (carList) {
+            carList.innerHTML = '';
+            renderCars(cars, carList);
+        }
+    });
+    categoriesContainer.appendChild(allCategoryItem);
+    
+    // 添加各个分类
+    categories.forEach(category => {
+        const categoryItem = document.createElement('div');
+        categoryItem.className = 'category-item';
+        
+        // 根据分类名称选择合适的图标
+        let iconClass = 'fa-car';
+        if (category.includes('丰田')) iconClass = 'fa-car-side';
+        else if (category.includes('本田')) iconClass = 'fa-car-alt';
+        else if (category.includes('日产')) iconClass = 'fa-truck-pickup';
+        else if (category.includes('现代')) iconClass = 'fa-shuttle-van';
+        else if (category.includes('传祺')) iconClass = 'fa-truck';
+        
+        categoryItem.innerHTML = `
+            <div class="category-icon"><i class="fas ${iconClass}"></i></div>
+            <div class="category-name">${category}</div>
+        `;
+        
+        categoryItem.addEventListener('click', () => {
+            // 更新激活状态
+            document.querySelectorAll('.category-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            categoryItem.classList.add('active');
+            
+            // 筛选该分类的车辆
+            const filteredCars = cars.filter(car => car.category === category);
+            
+            // 更新车辆列表
+            const carList = document.querySelector('.car-list:not(.recommend-list)');
+            if (carList) {
+                carList.innerHTML = '';
+                renderCars(filteredCars, carList);
+            }
+        });
+        
+        categoriesContainer.appendChild(categoryItem);
+    });
 }
 
 // 加载车辆详情
