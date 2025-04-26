@@ -481,127 +481,51 @@ function renderRecommendCars(cars) {
     renderCars(cars, container);
 }
 
-// 获取所有车辆数据
-let allCars = [];
-
-// 初始化页面
-document.addEventListener('DOMContentLoaded', function() {
-    // 获取车辆数据
-    fetch('data/cars.json')
-        .then(response => response.json())
-        .then(data => {
-            allCars = data;
-            
-            // 初始化品牌分类
-            initCategories();
-            
-            // 渲染所有车辆
-            renderAllCars();
-            
-            // 初始化移动端菜单
-            initMobileMenu();
-        })
-        .catch(error => console.error('加载数据失败:', error));
-});
-
-// 初始化品牌分类
-function initCategories() {
-    const categoriesContainer = document.querySelector('.categories');
-    if (!categoriesContainer) return;
-    
-    // 提取所有不重复的品牌
-    const categories = ['全部'];
-    allCars.forEach(car => {
-        if (car.category && !categories.includes(car.category)) {
-            categories.push(car.category);
-        }
-    });
-    
-    // 清空容器
-    categoriesContainer.innerHTML = '';
-    
-    // 添加分类项
-    categories.forEach(category => {
-        const categoryItem = document.createElement('div');
-        categoryItem.className = 'category-item' + (category === '全部' ? ' active' : '');
-        categoryItem.innerHTML = `<span class="category-name">${category}</span>`;
-        
-        // 添加点击事件
-        categoryItem.addEventListener('click', () => {
-            // 更新激活状态
-            document.querySelectorAll('.category-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            categoryItem.classList.add('active');
-            
-            // 筛选车辆
-            if (category === '全部') {
-                renderCars(allCars, document.querySelector('.all-cars .car-list'));
-            } else {
-                const filteredCars = allCars.filter(car => car.category === category);
-                renderCars(filteredCars, document.querySelector('.all-cars .car-list'));
-            }
-        });
-        
-        categoriesContainer.appendChild(categoryItem);
-    });
-}
-
-// 渲染所有车辆
-function renderAllCars() {
-    const container = document.querySelector('.all-cars .car-list');
-    if (!container) return;
-    
-    renderCars(allCars, container);
-}
-
-// 渲染车辆列表
-function renderCars(cars, container) {
-    if (!container) return;
-    
-    // 清空容器
-    container.innerHTML = '';
-    
-    // 如果没有车辆，显示提示
-    if (cars.length === 0) {
-        container.innerHTML = '<div class="no-cars">暂无车辆</div>';
-        return;
-    }
-    
-    // 添加车辆卡片
-    cars.forEach(car => {
-        const carCard = document.createElement('div');
-        carCard.className = 'car-card';
-        
-        // 构建HTML
-        carCard.innerHTML = `
-            <a href="detail.html?id=${car.id}">
-                <div class="car-image">
-                    <img src="${car.thumbnail || 'images/placeholder.jpg'}" alt="${car.title || '车辆图片'}">
-                </div>
-                <div class="car-info">
-                    <h3 class="car-title">${car.title || '未知车型'}</h3>
-                    <div class="car-price">
-                        <span class="current-price">${car.price ? car.price + '万' : '价格面议'}</span>
-                    </div>
-                    <div class="car-meta">
-                        <span>${car.year || ''}</span>
-                        <span>${car.mileage || ''}</span>
-                    </div>
-                    ${car.tags && car.tags.length > 0 ? `
-                    <div class="car-tags">
-                        ${car.tags.map(tag => `<span class="car-tag ${tag === '热门' ? 'hot' : ''}">${tag}</span>`).join('')}
-                    </div>
-                    ` : ''}
-                </div>
-            </a>
-        `;
-        
-        container.appendChild(carCard);
-    });
-}
-
 // 初始化移动端菜单
 function initMobileMenu() {
     // 移除菜单按钮功能，保持联系电话始终可见
+    // 原有代码已注释掉
+    /*
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navMenu = document.querySelector('.nav-menu');
+    
+    if (!menuBtn || !navMenu) return;
+    
+    menuBtn.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+    });
+    */
 }
+
+// 渲染品牌分类的CSS样式
+document.addEventListener('DOMContentLoaded', function() {
+    // 添加样式
+    const style = document.createElement('style');
+    style.textContent = `
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .category-item {
+            padding: 8px 15px;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .category-item:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    `;
+    document.head.appendChild(style);
+});
