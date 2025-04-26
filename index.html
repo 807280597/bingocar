@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>阿敬淘车 - 高品质二手车交易平台</title>
+    <link rel="icon" type="image/svg+xml" href="images/logo.svg">
     <meta name="description" content="提供优质二手车买卖、评估、金融服务的专业平台">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -30,16 +31,16 @@
     </header>
 
 
-    <!-- 主要内容区域 - 添加 main 开始标签 -->
+    <!-- 主要内容区域 -->
     <main class="container">
-        <!-- 热门推荐 -->
-        <h2 class="section-title">热门推荐</h2>
-        <section class="car-list">
-            <!-- 车辆数据将通过JavaScript动态加载 -->
+        <!-- 品牌分类 -->
+        <h2 class="section-title">品牌分类</h2>
+        <section class="categories">
+            <!-- 分类将通过JavaScript动态加载 -->
         </section>
 
-        <!-- 新上好车 -->
-        <h2 class="section-title">新上好车</h2>
+        <!-- 全部车辆 -->
+        <h2 class="section-title">全部车辆</h2>
         <section class="car-list">
             <!-- 车辆数据将通过JavaScript动态加载 -->
         </section>
@@ -61,7 +62,96 @@
         </div>
     </footer>
 
-    <!-- 删除调试代码，简化脚本引用 -->
     <script src="js/main.js"></script>
+    <script>
+        // 加载分类数据
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('data/cars.json')
+                .then(response => response.json())
+                .then(data => {
+                    // 提取所有不重复的分类
+                    const categories = [...new Set(data.cars.map(car => car.category))];
+                    
+                    // 渲染分类
+                    renderCategories(categories);
+                    
+                    // 渲染所有车辆
+                    renderCars(data.cars);
+                })
+                .catch(error => console.error('加载数据失败:', error));
+        });
+        
+        // 渲染分类
+        function renderCategories(categories) {
+            const container = document.querySelector('.categories');
+            if (!container) return;
+            
+            categories.forEach(category => {
+                const categoryItem = document.createElement('div');
+                categoryItem.className = 'category-item';
+                
+                // 根据品牌名称选择合适的图标
+                let iconClass = 'fa-car';
+                if (category.includes('丰田')) iconClass = 'fa-car-side';
+                if (category.includes('本田')) iconClass = 'fa-car-alt';
+                if (category.includes('日产')) iconClass = 'fa-truck-pickup';
+                if (category.includes('现代')) iconClass = 'fa-car-battery';
+                if (category.includes('传祺')) iconClass = 'fa-car-crash';
+                
+                categoryItem.innerHTML = `
+                    <div class="category-icon">
+                        <i class="fas ${iconClass}"></i>
+                    </div>
+                    <div class="category-name">${category}</div>
+                `;
+                
+                // 点击分类筛选车辆
+                categoryItem.addEventListener('click', () => {
+                    // 高亮当前选中的分类
+                    document.querySelectorAll('.category-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    categoryItem.classList.add('active');
+                    
+                    // 筛选并显示对应分类的车辆
+                    fetch('data/cars.json')
+                        .then(response => response.json())
+                        .then(data => {
+                            const filteredCars = category === '全部' 
+                                ? data.cars 
+                                : data.cars.filter(car => car.category === category);
+                            renderCars(filteredCars);
+                        });
+                });
+                
+                container.appendChild(categoryItem);
+            });
+            
+            // 添加"全部"分类
+            const allCategory = document.createElement('div');
+            allCategory.className = 'category-item active';
+            allCategory.innerHTML = `
+                <div class="category-icon">
+                    <i class="fas fa-th-large"></i>
+                </div>
+                <div class="category-name">全部</div>
+            `;
+            
+            allCategory.addEventListener('click', () => {
+                document.querySelectorAll('.category-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                allCategory.classList.add('active');
+                
+                fetch('data/cars.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        renderCars(data.cars);
+                    });
+            });
+            
+            container.insertBefore(allCategory, container.firstChild);
+        }
+    </script>
 </body>
 </html>
