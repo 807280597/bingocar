@@ -709,29 +709,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 初始化电话点击功能
 function initPhoneClick() {
-    // 获取所有包含电话号码的元素
-    const phoneElements = document.querySelectorAll('a[href="#"]:contains("联系电话"), p:contains("联系电话")');
-    
-    // 使用更通用的选择器，确保能找到所有电话号码元素
-    const allElements = document.querySelectorAll('a, p, li');
+    // 获取所有可能包含电话号码的元素
+    const allElements = document.querySelectorAll('a, p, li, span');
     const phonePattern = /联系电话[：:]\s*(\d{11})/;
     
     allElements.forEach(element => {
-        if (phonePattern.test(element.textContent)) {
-            const phoneNumber = element.textContent.match(phonePattern)[1];
-            
-            // 只在移动设备上添加点击事件
-            if (window.innerWidth <= 768) {
-                element.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    showPhoneOptions(phoneNumber);
-                });
+        if (element.textContent && phonePattern.test(element.textContent)) {
+            try {
+                const phoneNumber = element.textContent.match(phonePattern)[1];
                 
-                // 添加样式表明可点击
-                element.style.cursor = 'pointer';
-                if (!element.getAttribute('href') || element.getAttribute('href') === '#') {
-                    element.setAttribute('href', 'javascript:void(0)');
+                // 只在移动设备上添加点击事件
+                if (window.innerWidth <= 768) {
+                    element.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        showPhoneOptions(phoneNumber);
+                    });
+                    
+                    // 添加样式表明可点击
+                    element.style.cursor = 'pointer';
+                    if (element.tagName.toLowerCase() === 'a' && 
+                        (!element.getAttribute('href') || element.getAttribute('href') === '#')) {
+                        element.setAttribute('href', 'javascript:void(0)');
+                    }
                 }
+            } catch (error) {
+                console.error('处理电话号码时出错:', error);
             }
         }
     });
